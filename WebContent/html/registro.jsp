@@ -16,7 +16,7 @@
 				<option value="F">Femenino</option>
 				<option value="O">Otro</option>
 			</select>
-			<label>Fecha Nacimiento</label><input type="text" name="<%=ParameterNames.FECHA_NACIMIENTO%>" placeholder="dd-mm-aaaa">
+			<label>Fecha Nacimiento</label><input type="text" name="<%=ParameterNames.FECHA_NACIMIENTO%>" placeholder="aaaammdd">
 			<input type="text" name="<%=ParameterNames.TELEFONO%>" placeholder="Introduzca su telefono">
 			<input type="submit" value="Continuar" />
 		</form>

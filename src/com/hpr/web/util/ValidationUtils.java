@@ -81,14 +81,27 @@ public class ValidationUtils {
 			return null;
 		}
 	}
+	
+	public static String apellidosValidator (String parameter, boolean isName){
+
+		
+		if(!isName) {
+			if(!stringOnlyLetters(parameter)) {
+				parameter = null;
+			}
+		}else {
+			if(!stringWithoutNumber(parameter)) {
+				parameter =  null;
+			}
+		}
+		return parameter;
+
+	}
 
 	public static String stringOnlyLettersValidator (String parameter, boolean isName){
 
 		parameter = ParameterUtils.trimmer(parameter);
-
-		if(StringUtils.isEmptyOrWhitespaceOnly(parameter)) {
-			parameter =  null;
-		}
+		
 		if(!isName) {
 			if(!stringOnlyLetters(parameter)) {
 				parameter = null;

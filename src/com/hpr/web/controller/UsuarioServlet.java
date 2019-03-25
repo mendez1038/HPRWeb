@@ -17,6 +17,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.david.training.exceptions.DataException;
+import com.david.training.exceptions.MailException;
 import com.david.training.model.Usuario;
 import com.david.training.service.UsuarioService;
 import com.david.training.service.impl.UsuarioServiceImpl;
@@ -41,10 +42,8 @@ public class UsuarioServlet extends HttpServlet {
 		servicio = new UsuarioServiceImpl();
 	}
 
-
-
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) 
+			throws ServletException, IOException {
 
 		String action = request.getParameter(ParameterNames.ACTION);
 
@@ -93,7 +92,7 @@ public class UsuarioServlet extends HttpServlet {
 				target = ViewPaths.LOGIN;				
 			} else {			
 				if (logger.isDebugEnabled()) {
-					logger.info("Usuario {} autenticado.");
+					logger.info("Usuario {} autenticado.", usuario.getEmail());
 				}				
 				SessionManager.set(request, SessionAttributeNames.USER, usuario);						
 				target = request.getContextPath()+ViewPaths.HOME;					
@@ -101,11 +100,13 @@ public class UsuarioServlet extends HttpServlet {
 			}
 		} else if (Actions.LOGOUT.equalsIgnoreCase(action)) {
 			SessionManager.set(request, SessionAttributeNames.USER, null);
-			target = ViewPaths.INDEX;
+			target = request.getContextPath()+ViewPaths.INDEX;
 			redirect = true;
-		}else if (Actions.REGISTRO.equalsIgnoreCase(action)) {
+		}else if (Actions.PREREGISTRO.equalsIgnoreCase(action)) {
+			target= ViewPaths.REGISTRO;
+		}else if(Actions.REGISTRO.equalsIgnoreCase(action)) {
 			//Recuperamos parametros
-			
+
 			String email =  request.getParameter(ParameterNames.EMAIL);
 			String contrasena = request.getParameter(ParameterNames.CONTRASENA);
 			String nombre =  request.getParameter(ParameterNames.NOMBRE);
@@ -115,47 +116,41 @@ public class UsuarioServlet extends HttpServlet {
 			String telefono =  request.getParameter(ParameterNames.TELEFONO);
 			Date fNacimiento = null;
 			//validacion
-
 			email = ValidationUtils.emailValidator(email);
 			if(email == null) {
 				errors.add(ParameterNames.EMAIL, ErrorCodes.MANDATORY_PARAMETER);
-			}
+			} 
 			contrasena = ValidationUtils.passwordValidator(contrasena);
 			if(contrasena == null) {
 				errors.add(ParameterNames.CONTRASENA, ErrorCodes.MANDATORY_PARAMETER);
-			}
-			nombre = ValidationUtils.stringOnlyLettersValidator(nombre, true);
+			} 
+			nombre = ValidationUtils.stringOnlyLettersValidator(nombre, false);
 			if(nombre == null) {
-				errors.add(ParameterNames.NOMBRE, ErrorCodes.MANDATORY_PARAMETER);
+				errors.add(ParameterNames.NOMBRE, ErrorCodes.OPTIONAL_PARAMETER);
 			}
-			apellidos = ValidationUtils.stringOnlyLettersValidator(apellidos, false);
+			apellidos = ValidationUtils.apellidosValidator(apellidos, false);
 			if(apellidos == null) {
-				errors.add(ParameterNames.APELLIDOS, ErrorCodes.MANDATORY_PARAMETER);
+				errors.add(ParameterNames.APELLIDOS, ErrorCodes.OPTIONAL_PARAMETER);
 			}
 			genero = ValidationUtils.stringOnlyLettersValidator(genero, false);
 			if(genero == null) {
-				errors.add(ParameterNames.GENERO, ErrorCodes.MANDATORY_PARAMETER);
+				errors.add(ParameterNames.GENERO, ErrorCodes.OPTIONAL_PARAMETER);
 			}
 
-
 			if (!StringUtils.isEmptyOrWhitespaceOnly(fechaNacimiento)) {
-				DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+				DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
 
 				try {
 					fNacimiento = df.parse(fechaNacimiento);
 				} catch (ParseException e) {
 					logger.warn("parse exception "+ e);
-					errors.add(ParameterNames.CONTRASENA,ErrorCodes.MANDATORY_PARAMETER);
+					errors.add(ParameterNames.FECHA_NACIMIENTO,ErrorCodes.PARSE_ERROR);
 				}
 
 			}
-
-			if(fechaNacimiento == null) {
-				errors.add(ParameterNames.FECHA_NACIMIENTO, ErrorCodes.MANDATORY_PARAMETER);
-			}
 			telefono = ValidationUtils.stringOnlyLettersValidator(telefono, false);
 			if(telefono == null) {
-				errors.add(ParameterNames.TELEFONO, ErrorCodes.MANDATORY_PARAMETER);
+				errors.add(ParameterNames.TELEFONO, ErrorCodes.OPTIONAL_PARAMETER);
 			}
 
 			Usuario u = new Usuario();
@@ -168,21 +163,40 @@ public class UsuarioServlet extends HttpServlet {
 				u.setFechaNacimiento(fNacimiento);
 				u.setTelefono(telefono);
 			}
-				if (errors.hasErrors()) {	
-					if (logger.isDebugEnabled()) {
-						logger.debug("Registro fallido: {}", errors);
-					}				
-					request.setAttribute(AttributeNames.ERRORS, errors);				
-					target = ViewPaths.REGISTRO;	
 
-				} else {
-					if (logger.isDebugEnabled()) {
-						logger.info("Usuario "+u.getEmail()+" registrado.");
-					}				
-					request.setAttribute(AttributeNames.USUARIOS, u);						
-					target = ViewPaths.HOME;	
+			u = (Usuario) SessionManager.get(request, AttributeNames.USUARIOS);
+
+			if (!errors.hasErrors()) {
+				try {	
+					u = servicio.signUp(u);
+				} catch (MailException e) {
+					errors.add(Actions.REGISTRO, ErrorCodes.MAIL_ERROR);
+				} catch (DataException e) {
+					errors.add(Actions.REGISTRO, ErrorCodes.SIGNUP_ERROR);
 				}
-		
+			}
+
+			if (u == null) {
+				errors.add(ParameterNames.ACTION,ErrorCodes.SIGNUP_ERROR);
+			}
+
+
+			if (errors.hasErrors()) {	
+				if (logger.isDebugEnabled()) {
+					logger.debug("Registro fallido: {}", errors);
+				}				
+				request.setAttribute(AttributeNames.ERRORS, errors);				
+				target = ViewPaths.REGISTRO;	
+
+			} else {
+				if (logger.isDebugEnabled()) {
+					logger.info("Usuario {} registrado.", u.getEmail());
+				}				
+				SessionManager.set(request, AttributeNames.USUARIOS, u);						
+				target = ViewPaths.HOME;
+				redirect = true;
+			}
+
 		}else {
 			logger.error("Action desconocida");
 			target = ViewPaths.INDEX;
@@ -194,8 +208,6 @@ public class UsuarioServlet extends HttpServlet {
 			logger.info("Forwarding to "+target);
 			request.getRequestDispatcher(target).forward(request, response);
 		}
-
-
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

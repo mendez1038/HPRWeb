@@ -13,7 +13,7 @@
 		</form>
 		<a href="#ayuda">¿Necesitas ayuda?</a>
 		<p>¿No tienes cuenta? </p>
-		<a href="<%=ControllerPaths.USUARIO%>?action=<%=Actions.REGISTRO%>">Crea tu cuenta</a>
+		<a href="<%=ControllerPaths.USUARIO%>?action=<%=Actions.PREREGISTRO%>">Crea tu cuenta</a>
 		
 </div>
 

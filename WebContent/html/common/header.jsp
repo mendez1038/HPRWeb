@@ -29,15 +29,11 @@
 		<div id="user">
 		<%
 		Usuario u = (Usuario) request.getSession().getAttribute(SessionAttributeNames.USER);
-		if (u == null) {
+		if (u != null) {
 			
 			%>
-			<a>Usuario</a>
-			<a href="/HPRWEB/html/index.jsp">Inicio</a>
-			<% } else {
-				 %>
 			 <a><%=u.getEmail()%></a>
-			 <p><a href="/HPRWEB/usuarios?action=logout">Salir</a></p> 
+			 <p><a href="<%=ControllerPaths.USUARIO%>?action=<%=Actions.LOGOUT%>">Salir</a></p> 
 			 <%
 			}
 			 %>
