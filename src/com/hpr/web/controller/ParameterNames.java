@@ -12,5 +12,6 @@ public interface ParameterNames {
 	public static final String FECHA_NACIMIENTO="fecha_nacimiento";
 	public static final String TELEFONO="telefono";
 	public static final String RECORDARME="recordarme";
+	public static final String TITULO="titulo";
 
 }

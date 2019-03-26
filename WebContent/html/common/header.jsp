@@ -1,12 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@ page import="com.hpr.web.controller.*, com.hpr.web.model.*, com.david.training.model.*" %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 	<title>HPR WEB</title>
-	
+	<link rel="icon" href="<%=request.getContextPath()%>/img/logo.ico">
 </head>
 <%
 	Errors errors = (Errors) request.getAttribute(AttributeNames.ERRORS);
@@ -37,5 +37,13 @@
 			 <%
 			}
 			 %>
+		</div>
+		<div id="buscador">
+		<form action="<%=ControllerPaths.CONTENIDO%>" method="get">
+			<input type="hidden" name="<%=ParameterNames.ACTION%>" value="<%=Actions.BUSCAR%>"/>
+			<input type="text" name="<%=ParameterNames.TITULO%>" placeholder="Buscador"/>
+			<button type="submit">Buscar</button>
+		<!-- 	<input type="button" value="Filtros"/>
+		 --></form> 
 		</div>
 	</div>
