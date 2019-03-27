@@ -60,12 +60,12 @@ public class ContenidoServlet extends HttpServlet {
 			String idioma = "es";
 			pc.setTitulo(titulo);
 			List<Contenido> resultados = null;
-				try {
-					resultados = servicio.busquedaEstructurada(pc, idioma);
-				} catch (DataException e) {
-					logger.warn("buscando "+pc, e);
-					errors.add(ParameterNames.ACTION,ErrorCodes.AUTHENTICATION_ERROR);
-				}
+			try {
+				resultados = servicio.busquedaEstructurada(pc, idioma);
+			} catch (DataException e) {
+				logger.warn("buscando "+pc, e);
+				errors.add(ParameterNames.ACTION,ErrorCodes.AUTHENTICATION_ERROR);
+			}
 			if (errors.hasErrors()) {	
 				if (logger.isDebugEnabled()) {
 					logger.debug("Busqueda fallida: {}", errors);
@@ -85,7 +85,7 @@ public class ContenidoServlet extends HttpServlet {
 			logger.error("Action desconocida");
 			target = ViewPaths.HOME;
 		}
-		
+
 		if (redirect) {
 			logger.info("Redirecting to "+target);
 			response.sendRedirect(target);
