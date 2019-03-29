@@ -1,6 +1,5 @@
 	<div id="footer">
-		<center><p>Footer</p></center>
-		©2019 HPR Web, Inc. 
+		<p>©2019 HPR Web, Inc. All Rights Reserved.</p> 
 		
 	</div>
 	</body>

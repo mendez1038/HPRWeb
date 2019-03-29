@@ -1,4 +1,4 @@
-<%@ page import="java.util.*, com.david.training.model.*, com.hpr.web.util.*, com.hpr.web.controller.*"%>
+<%@ page import="java.util.*, com.david.training.model.*, com.hpr.web.util.*, com.hpr.web.controller.*, com.david.training.service.*"%>
     
 <div id="buscador-resultados">	
 	<%		
@@ -9,7 +9,7 @@
 			<ul><%
 			for (Contenido resultado: resultados) {
 				%>
-					<li><a href="<%=(ControllerPaths.CONTENIDO+"?")%>
+					<li><a href="<%=ControllerPaths.CONTENIDO%>?
 							<%=ParameterNames.ACTION%>=
 							<%=Actions.BUSCAR%>"><%=resultado.getTitulo()%></a></li>
 				<%
