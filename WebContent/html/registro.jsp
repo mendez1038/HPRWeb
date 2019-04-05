@@ -20,7 +20,8 @@
 			<input type="text" name="<%=ParameterNames.TELEFONO%>" placeholder="Introduzca su telefono">
 			<input type="submit" value="Continuar" />
 		</form>
-		
+		<label>¿YA tienes cuenta? </label>
+		<a href="<%=request.getContextPath() + ViewPaths.LOGIN%>">Inicia Sesión</a>
 		
 </div>
 

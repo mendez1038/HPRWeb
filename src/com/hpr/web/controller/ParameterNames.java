@@ -13,5 +13,19 @@ public interface ParameterNames {
 	public static final String TELEFONO="telefono";
 	public static final String RECORDARME="recordarme";
 	public static final String TITULO="titulo";
+	public static final String ID="id";
+	public static final String RESTRICCION_EDAD="restriccion_edad";
+	public static final String TIPO_CONTENIDO= "tipo_contenido";
+	public static final String DESCUENTO="descuento";
+	public static final String ARTISTA="artista";
+	public static final String PRECIO="precio";
+	public static final String ANO="ano";
+	public static final String PAIS="pais";
+	public static final String DURACION="duracion";
+	
+	
+	
+	
+	
 
 }

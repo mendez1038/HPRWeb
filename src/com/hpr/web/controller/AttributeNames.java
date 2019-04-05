@@ -4,6 +4,7 @@ public interface AttributeNames {
 	public static final String ERRORS = "errors";
 	public static final String USUARIOS = "usuarios";
 	public static final String RESULTADOS = "resultados";
+	public static final String CONTENIDO = "contenido";
 	
 
 }

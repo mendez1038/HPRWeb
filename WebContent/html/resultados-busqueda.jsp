@@ -1,20 +1,22 @@
-<%@ page import="java.util.*, com.david.training.model.*, com.hpr.web.util.*, com.hpr.web.controller.*, com.david.training.service.*"%>
+<%@ page import="com.hpr.web.controller.Actions"%>
     
 <div id="buscador-resultados">	
-	<%		
-		List<Contenido> resultados = (List<Contenido>) request.getAttribute(AttributeNames.RESULTADOS);	
-		if (resultados!=null && !resultados.isEmpty()) {
-			%>
+	
+	<c:if test="${not empty resultados.page}">
 			<p>Resultados:</p>
-			<ul><%
-			for (Contenido resultado: resultados) {
-				%>
-					<li><a href="<%=ControllerPaths.CONTENIDO%>?
-							<%=ParameterNames.ACTION%>=
-							<%=Actions.BUSCAR%>"><%=resultado.getTitulo()%></a></li>
-				<%
-			}
-			%></ul><%
-		}
-	%>
+			<ul>
+			<c:forEach items="${resultados}" var="r">
+					
+					<c:url var="urlDetalle" scope="page" value="contenido">
+						<c:param name="action" value="<%=Actions.BUSCAR_ID %>"/>
+						<c:param name="id" value="${r.id}"/>
+					</c:url>
+					<li>
+					<a href="${urlDetalle}"><${r.titulo}</a>
+					</li>
+			</c:forEach>
+			</ul>
+			
+	
+	</c:if>
 </div>	

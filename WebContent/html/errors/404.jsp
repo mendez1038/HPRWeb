@@ -10,7 +10,6 @@
 <body>
 	<h3>Error 404</h3>
 	<img src="<%=request.getContextPath()%>/imgs/logo.png"></img>
-	<a href="<%=request.getContextPath()%>">Inicio</a>
-	<a href="<%=request.getContextPath()+ViewPaths.HOME%>">Home</a>
+	<a href="<%=request.getContextPath()+ViewPaths.HOME%>">Inicio</a>
 </body>
 </html>

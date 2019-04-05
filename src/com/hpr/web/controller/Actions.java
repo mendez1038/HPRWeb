@@ -6,4 +6,5 @@ public interface Actions {
 	public static final String PREREGISTRO = "preregistro";	
 	public static final String REGISTRO = "registro";
 	public static final String BUSCAR = "buscar";
+	public static final String BUSCAR_ID = "buscar_id";
 }

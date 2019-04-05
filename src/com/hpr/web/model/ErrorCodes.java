@@ -8,5 +8,6 @@ public interface ErrorCodes {
 	public static final String SIGNUP_ERROR = "SIGNUP_ERROR";
 	public static final String MAIL_ERROR = "MAIL_ERROR";
 	public static final String SEARCH_ERROR = "SEARCH_ERROR";
+	public static final String DETALLE_ERROR = "DETALLE_ERROR";
 	
 }
