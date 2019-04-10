@@ -6,6 +6,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
+<fmt:setBundle basename="resources.Messages" var="traducciones" scope="session"/>
+<fmt:setLocale value="${sessionScope['user-locale']}" scope="session"/>
 
 <!DOCTYPE html>
 <html>
@@ -32,16 +34,17 @@
 			</a>	
 			<ul class="menu">
 				<li><a href="<%=request.getContextPath()+ViewPaths.HOME%>">Home</a></li>
-				<li><a href="#">Lista</a></li>
-				<li><a href="#">Favoritos</a></li>
-				<li><a href="#">Carrito</a></li>
+				<li><a href="#">
+</a></li>
+				<li><a href="#"><fmt:message key = "favoritos" bundle="${traducciones}"/></a></li>
+				<li><a href="#"><fmt:message key = "carrito" bundle="${traducciones}"/></a></li>
 				<li>
 					<form action="<%=ControllerPaths.CONTENIDO%>" method="post">
 						<input type="hidden" name="<%=ParameterNames.ACTION%>" value="<%=Actions.BUSCAR%>" /> 
-						<input type="text" name="<%=ParameterNames.TITULO%>" value="<%=ParameterUtils.getParameter(request, ParameterNames.NOMBRE)%>"placeholder="Título, artista, director..." />
-						<button type="submit">Buscar</button>
+						<input type="text" name="<%=ParameterNames.TITULO%>" value="<%=ParameterUtils.getParameter(request, ParameterNames.TITULO)%>"placeholder="<fmt:message key = "busqueda" bundle="${traducciones}"/>" />
+						<input type="submit" value="<fmt:message key = "buscar" bundle="${traducciones}"/>">
 					</form>
-					<button >Filtros</button>
+					<button ><fmt:message key = "filtros" bundle="${traducciones}"/></button>
 				</li>
 
 		<c:choose>
@@ -49,18 +52,18 @@
 			
 				<li id="user"><a>${sessionScope['user'].email}</a>
 					<ul class="submenu">
-						<li><a href="#">Cuenta</a></li>
+						<li><a href="<%=request.getContextPath()+ViewPaths.PERFIL%>"><fmt:message key = "cuenta" bundle="${traducciones}"/></a></li>
 						<li><a
-							href="<%=ControllerPaths.USUARIO%>?action=<%=Actions.LOGOUT%>">Salir</a></li>
+							href="<%=ControllerPaths.USUARIO%>?action=<%=Actions.LOGOUT%>"><fmt:message key = "cerrarsesion" bundle="${traducciones}"/></a></li>
 					</ul></li>
 		</c:when>
 		<c:otherwise>
 				
 				<form method="get">
-					<button type="submit" formaction="<%=request.getContextPath() + ViewPaths.LOGIN%>">Iniciar Sesion</button> 
+					<button type="submit" formaction="<%=request.getContextPath() + ViewPaths.LOGIN%>"><fmt:message key = "iniciosesion" bundle="${traducciones}"/></button> 
 				</form>
 				<form action="get">
-					<button type="submit" formaction="<%=request.getContextPath() + ViewPaths.REGISTRO%>">Registrate</button>
+					<button type="submit" formaction="<%=request.getContextPath() + ViewPaths.REGISTRO%>"><fmt:message key = "registro" bundle="${traducciones}"/></button>
 				</form>
 		</c:otherwise>
 		</c:choose>

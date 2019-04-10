@@ -12,8 +12,4 @@
     <error-code>500</error-code>
     <location>/html/errors/500.jsp</location>
   </error-page>
-  <filter>
-    <filter-name>InitSessionFilter</filter-name>
-    <filter-class>com.hpr.web.filter.InitSessionFilter</filter-class>
-  </filter>
 </web-app>

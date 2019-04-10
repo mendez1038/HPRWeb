@@ -22,6 +22,9 @@ public interface ParameterNames {
 	public static final String ANO="ano";
 	public static final String PAIS="pais";
 	public static final String DURACION="duracion";
+	public static final String LOCALE="locale";
+	public static final String EN="en";
+	public static final String ES="es";
 	
 	
 	

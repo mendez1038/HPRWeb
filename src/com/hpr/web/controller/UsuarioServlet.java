@@ -1,10 +1,11 @@
 package com.hpr.web.controller;
 
 import java.io.IOException;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -23,9 +24,13 @@ import com.david.training.service.UsuarioService;
 import com.david.training.service.impl.UsuarioServiceImpl;
 import com.hpr.web.model.ErrorCodes;
 import com.hpr.web.model.Errors;
+import com.hpr.web.util.CookieManager;
+import com.hpr.web.util.DateUtils;
+import com.hpr.web.util.LocaleManager;
 import com.hpr.web.util.ParameterUtils;
 import com.hpr.web.util.SessionManager;
 import com.hpr.web.util.ValidationUtils;
+import com.hpr.web.util.WebConstants;
 import com.mysql.cj.util.StringUtils;
 
 
@@ -94,7 +99,8 @@ public class UsuarioServlet extends HttpServlet {
 				if (logger.isDebugEnabled()) {
 					logger.info("Usuario {} autenticado.", usuario.getEmail());
 				}				
-				SessionManager.set(request, SessionAttributeNames.USER, usuario);						
+				SessionManager.set(request, SessionAttributeNames.USER, usuario);
+				CookieManager.addCookie(response, "login", usuario.getEmail(), "/", 7*24*60*60);
 				target = request.getContextPath()+ViewPaths.HOME;					
 				redirect = true;
 			}
@@ -114,7 +120,14 @@ public class UsuarioServlet extends HttpServlet {
 			String genero =  request.getParameter(ParameterNames.GENERO);
 			String fechaNacimiento = request.getParameter(ParameterNames.FECHA_NACIMIENTO);
 			String telefono =  request.getParameter(ParameterNames.TELEFONO);
+			SimpleDateFormat fecha = (SimpleDateFormat) DateUtils.SHORT_FORMAT_DATE;
 			Date fNacimiento = null;
+			try {
+				fNacimiento = fecha.parse(fechaNacimiento);
+			} catch (ParseException e1) {
+				logger.warn("Fecha  " +e1);
+				errors.add(ParameterNames.ACTION,ErrorCodes.PARSE_ERROR);
+			}
 			//validacion
 			email = ValidationUtils.emailValidator(email);
 			if(email == null) {
@@ -137,17 +150,6 @@ public class UsuarioServlet extends HttpServlet {
 				errors.add(ParameterNames.GENERO, ErrorCodes.OPTIONAL_PARAMETER);
 			}
 
-			if (!StringUtils.isEmptyOrWhitespaceOnly(fechaNacimiento)) {
-				DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
-
-				try {
-					fNacimiento = df.parse(fechaNacimiento);
-				} catch (ParseException e) {
-					logger.warn("parse exception "+ e);
-					errors.add(ParameterNames.FECHA_NACIMIENTO,ErrorCodes.PARSE_ERROR);
-				}
-
-			}
 			telefono = ValidationUtils.stringOnlyLettersValidator(telefono, false);
 			if(telefono == null) {
 				errors.add(ParameterNames.TELEFONO, ErrorCodes.OPTIONAL_PARAMETER);
@@ -197,6 +199,80 @@ public class UsuarioServlet extends HttpServlet {
 				redirect = true;
 			}
 
+		}else if(Actions.EDICION.equalsIgnoreCase(action)) {
+			Usuario user=(Usuario) SessionManager.get(request, SessionAttributeNames.USER);
+			String contrasena=request.getParameter(ParameterNames.CONTRASENA);
+			String nombre=request.getParameter(ParameterNames.NOMBRE);
+			String apellidos=request.getParameter(ParameterNames.APELLIDOS);
+			String genero=request.getParameter(ParameterNames.GENERO);
+			String fechaNacimiento = request.getParameter(ParameterNames.FECHA_NACIMIENTO);
+			String telefono=request.getParameter(ParameterNames.TELEFONO);	
+			SimpleDateFormat fecha = (SimpleDateFormat) DateUtils.SHORT_FORMAT_DATE;
+			Date fNacimiento = null;
+			try {
+				fNacimiento = fecha.parse(fechaNacimiento);
+			} catch (ParseException e1) {
+				logger.warn("Fecha  " +e1);
+				errors.add(ParameterNames.ACTION,ErrorCodes.PARSE_ERROR);
+			}
+			contrasena = ValidationUtils.passwordValidator(contrasena);
+			if(contrasena == null) {
+				errors.add(ParameterNames.CONTRASENA, ErrorCodes.OPTIONAL_PARAMETER);
+			} 
+			nombre = ValidationUtils.stringOnlyLettersValidator(nombre, false);
+			if(nombre == null) {
+				errors.add(ParameterNames.NOMBRE, ErrorCodes.OPTIONAL_PARAMETER);
+			}
+			apellidos = ValidationUtils.apellidosValidator(apellidos, false);
+			if(apellidos == null) {
+				errors.add(ParameterNames.APELLIDOS, ErrorCodes.OPTIONAL_PARAMETER);
+			}
+			genero = ValidationUtils.stringOnlyLettersValidator(genero, false);
+			if(genero == null) {
+				errors.add(ParameterNames.GENERO, ErrorCodes.OPTIONAL_PARAMETER);
+			}
+
+			telefono = ValidationUtils.stringOnlyLettersValidator(telefono, false);
+			if(telefono == null) {
+				errors.add(ParameterNames.TELEFONO, ErrorCodes.OPTIONAL_PARAMETER);
+			}
+			Usuario update=new Usuario();
+			update.setContrasena(contrasena);
+			update.setNombre(nombre);
+			update.setApellidos(apellidos);
+			update.setGenero(genero);
+			update.setFechaNacimiento(fNacimiento);
+			update.setTelefono(telefono);
+			update.setEmail(user.getEmail());
+			
+			//update de direccion
+			
+			
+			target = ViewPaths.PERFIL;
+			redirect=true;
+		}else if (Actions.CAMBIAR_IDIOMA.equalsIgnoreCase(action)) {
+			String localeName = request.getParameter(ParameterNames.LOCALE);
+			// Recordar que hay que validar... lo que nos envian, incluso en algo como esto.
+			// Buscamos entre los Locale soportados por la web:
+			List<Locale> results = LocaleManager.getMatchedLocales(localeName);
+			Locale newLocale = null;
+			if (results.size()>0) {
+				newLocale = results.get(0);
+			} else {
+				logger.warn("Request locale not supported: "+localeName);
+				newLocale = LocaleManager.getDefault();
+			}
+
+			SessionManager.set(request, WebConstants.USER_LOCALE, newLocale);			
+			CookieManager.addCookie(response, WebConstants.USER_LOCALE, newLocale.toString(), "/", 365*24*60*60);
+
+			if (logger.isDebugEnabled()) {
+				logger.debug("Locale changed to "+newLocale);
+			}
+
+			target=request.getHeader(ViewPaths.REFERER);
+			redirect=true;
+			
 		}else {
 			logger.error("Action desconocida");
 			target = ViewPaths.INDEX;

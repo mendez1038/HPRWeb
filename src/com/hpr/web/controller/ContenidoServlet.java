@@ -63,7 +63,9 @@ public class ContenidoServlet extends HttpServlet {
 		boolean redirect = false;
 
 		if (Actions.BUSCAR.equalsIgnoreCase(action)) {
-
+			Results<Contenido> resultados = null;
+			ProductoCriteria pc = new ProductoCriteria();
+			
 			String texto = request.getParameter(ParameterNames.TITULO);
 //			String[] generos = request.getParameterValues(ParameterNames.GENERO);
 //			String rEdad = request.getParameter(ParameterNames.RESTRICCION_EDAD);
@@ -76,17 +78,24 @@ public class ContenidoServlet extends HttpServlet {
 //			String duracion = request.getParameter(ParameterNames.DURACION);
 
 			
-
-			ProductoCriteria pc = new ProductoCriteria();
-				
 			if(texto!=null && !StringUtils.isEmptyOrWhitespaceOnly(texto)) {
 				texto = ValidationUtils.stringOnlyLettersValidator(texto, false);
-				pc.setTitulo(texto);
+				
 				}
 
-				Results<Contenido> resultados = null;
+				
 				try {
+					pc.setTitulo(texto);
 					resultados = servicio.busquedaEstructurada(pc, "es", 1, 3);
+					
+					if ( resultados!=null) {
+						
+						request.setAttribute(AttributeNames.RESULTADOS, resultados);
+					}
+					else {
+						request.setAttribute(AttributeNames.ERRORS, "No hay resultados");
+					}
+					
 				} catch (DataException e) {
 					logger.warn("Buscando... "+texto, e);
 					errors.add(ParameterNames.ACTION,ErrorCodes.SEARCH_ERROR);	
@@ -103,7 +112,7 @@ public class ContenidoServlet extends HttpServlet {
 					if (logger.isDebugEnabled()) {
 						logger.info("Busqueda completada para: "+texto);
 					}				
-					request.setAttribute(AttributeNames.RESULTADOS, resultados);
+					request.setAttribute(AttributeNames.RESULTADOS, resultados.getPage());
 					target = request.getContextPath()+ViewPaths.BUSQUEDA;
 					redirect=true;
 				}

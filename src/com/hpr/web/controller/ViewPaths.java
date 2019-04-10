@@ -8,6 +8,8 @@ public interface ViewPaths {
 	public static final String BUSQUEDA = "/html/busqueda.jsp";
 	public static final String ERROR_404 = "/html/errors/404.jsp";
 	public static final String VISTA_DETALLE = "/html/detalle.jsp";
+	public static final String PERFIL = "/html/perfil.jsp";
+	public static final String REFERER="referer";
 	
 	
 	

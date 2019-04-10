@@ -3,11 +3,11 @@
 <%@include file="/html/common/header.jsp"%>
 
 <div id="home">
-		<h3>Bienvenido y gracias por confiar en nosotros</h3>	
+		<h3><fmt:message key = "bienvenida" bundle="${traducciones}"/></h3>	
 		
-		<h2>Novedades</h2>
-		<h2>Mas vendidos</h2>
-		<h2>Rebajas</h2>
+		<h2><fmt:message key = "novedades" bundle="${traducciones}"/></h2>
+		<h2><fmt:message key = "masvendidos" bundle="${traducciones}"/></h2>
+		<h2><fmt:message key = "rebajas" bundle="${traducciones}"/></h2>
 		
 </div>
 

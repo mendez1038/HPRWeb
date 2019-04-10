@@ -1,9 +1,10 @@
 <%@ page import="com.hpr.web.controller.Actions"%>
     
 <div id="buscador-resultados">	
+	<h3>hola</h3>
+	<c:if test="${not empty resultados}">
 	
-	<c:if test="${not empty resultados.page}">
-			<p>Resultados:</p>
+			<p><fmt:message key = "resultados" bundle="${traducciones}"/></p>
 			<ul>
 			<c:forEach items="${resultados}" var="r">
 					
