@@ -1,4 +1,4 @@
-package com.sacra.ecommerce.web.util;
+package com.hpr.web.util;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,8 +10,11 @@ import org.apache.commons.lang3.LocaleUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.sacra.ecommerce.web.config.ConfigurationManager;
-import com.sacra.ecommerce.web.config.ConfigurationParameterNames;
+import com.hpr.web.config.ConfigurationManager;
+import com.hpr.web.config.ConfigurationParameterNames;
+
+
+
 
 public class LocaleManager {
 	

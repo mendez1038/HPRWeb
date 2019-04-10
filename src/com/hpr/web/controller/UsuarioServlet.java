@@ -18,6 +18,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.david.training.exceptions.DataException;
+import com.david.training.exceptions.InstanceNotFoundException;
 import com.david.training.exceptions.MailException;
 import com.david.training.model.Usuario;
 import com.david.training.service.UsuarioService;
@@ -111,6 +112,9 @@ public class UsuarioServlet extends HttpServlet {
 		}else if (Actions.PREREGISTRO.equalsIgnoreCase(action)) {
 			target= ViewPaths.REGISTRO;
 		}else if(Actions.REGISTRO.equalsIgnoreCase(action)) {
+			target = null;
+    		redirect = false;
+			
 			//Recuperamos parametros
 
 			String email =  request.getParameter(ParameterNames.EMAIL);
@@ -145,18 +149,15 @@ public class UsuarioServlet extends HttpServlet {
 			if(apellidos == null) {
 				errors.add(ParameterNames.APELLIDOS, ErrorCodes.OPTIONAL_PARAMETER);
 			}
-			genero = ValidationUtils.stringOnlyLettersValidator(genero, false);
-			if(genero == null) {
-				errors.add(ParameterNames.GENERO, ErrorCodes.OPTIONAL_PARAMETER);
-			}
+			
 
-			telefono = ValidationUtils.stringOnlyLettersValidator(telefono, false);
+			//telefono = ValidationUtils.stringOnlyLettersValidator(telefono, false);
 			if(telefono == null) {
 				errors.add(ParameterNames.TELEFONO, ErrorCodes.OPTIONAL_PARAMETER);
 			}
 
 			Usuario u = new Usuario();
-			if(!errors.hasErrors()) {
+			
 				u.setEmail(email);
 				u.setContrasena(contrasena);
 				u.setNombre(nombre);
@@ -164,41 +165,41 @@ public class UsuarioServlet extends HttpServlet {
 				u.setGenero(genero);
 				u.setFechaNacimiento(fNacimiento);
 				u.setTelefono(telefono);
-			}
+			
 
 			u = (Usuario) SessionManager.get(request, AttributeNames.USUARIOS);
 
-			if (!errors.hasErrors()) {
+			
 				try {	
-					u = servicio.signUp(u);
+					 servicio.signUp(u);
+					if (u == null) {
+						
+						if (logger.isDebugEnabled()) {
+							logger.debug("Registro fallido: {}", errors);
+						}
+						//errors.add(ParameterNames.ACTION,ErrorCodes.SIGNUP_ERROR);
+						request.setAttribute(AttributeNames.ERRORS, AttributeNames.DUPLICATED_USER);
+						target = ViewPaths.REGISTRO;
+					} else {
+						if (logger.isDebugEnabled()) {
+							logger.info("Usuario {} registrado.", u.getEmail());
+						}				
+						SessionManager.set(request, SessionAttributeNames.USER, u);						
+						target = ViewPaths.HOME;
+						redirect = true;
+					}
 				} catch (MailException e) {
 					errors.add(Actions.REGISTRO, ErrorCodes.MAIL_ERROR);
 				} catch (DataException e) {
 					errors.add(Actions.REGISTRO, ErrorCodes.SIGNUP_ERROR);
 				}
-			}
 
-			if (u == null) {
-				errors.add(ParameterNames.ACTION,ErrorCodes.SIGNUP_ERROR);
-			}
+		}else if(Actions.PREEDICION.equalsIgnoreCase(action)) {
+			Usuario user=(Usuario) SessionManager.get(request, SessionAttributeNames.USER);
+			request.setAttribute(AttributeNames.USUARIOS, user);
 
-
-			if (errors.hasErrors()) {	
-				if (logger.isDebugEnabled()) {
-					logger.debug("Registro fallido: {}", errors);
-				}				
-				request.setAttribute(AttributeNames.ERRORS, errors);				
-				target = ViewPaths.REGISTRO;	
-
-			} else {
-				if (logger.isDebugEnabled()) {
-					logger.info("Usuario {} registrado.", u.getEmail());
-				}				
-				SessionManager.set(request, AttributeNames.USUARIOS, u);						
-				target = ViewPaths.HOME;
-				redirect = true;
-			}
-
+			target = ViewPaths.PERFIL;
+		
 		}else if(Actions.EDICION.equalsIgnoreCase(action)) {
 			Usuario user=(Usuario) SessionManager.get(request, SessionAttributeNames.USER);
 			String contrasena=request.getParameter(ParameterNames.CONTRASENA);
@@ -232,10 +233,10 @@ public class UsuarioServlet extends HttpServlet {
 				errors.add(ParameterNames.GENERO, ErrorCodes.OPTIONAL_PARAMETER);
 			}
 
-			telefono = ValidationUtils.stringOnlyLettersValidator(telefono, false);
-			if(telefono == null) {
-				errors.add(ParameterNames.TELEFONO, ErrorCodes.OPTIONAL_PARAMETER);
-			}
+			//telefono = ValidationUtils.stringOnlyLettersValidator(telefono, false);
+//			if(telefono == null) {
+//				errors.add(ParameterNames.TELEFONO, ErrorCodes.OPTIONAL_PARAMETER);
+//			}
 			Usuario update=new Usuario();
 			update.setContrasena(contrasena);
 			update.setNombre(nombre);
@@ -245,10 +246,16 @@ public class UsuarioServlet extends HttpServlet {
 			update.setTelefono(telefono);
 			update.setEmail(user.getEmail());
 			
-			//update de direccion
+			try {
+				servicio.update(update);
+			} catch (InstanceNotFoundException e) {
+				logger.info(e.getMessage(),e);
+			} catch (DataException e) {
+				logger.info(e.getMessage(),e);
+			}
 			
 			
-			target = ViewPaths.PERFIL;
+			target = ControllerPaths.USUARIO+"?"+ParameterNames.ACTION+"="+Actions.PREEDICION;
 			redirect=true;
 		}else if (Actions.CAMBIAR_IDIOMA.equalsIgnoreCase(action)) {
 			String localeName = request.getParameter(ParameterNames.LOCALE);
