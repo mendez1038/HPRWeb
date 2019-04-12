@@ -15,7 +15,6 @@ import com.hpr.web.config.ConfigurationParameterNames;
 
 
 
-
 public class LocaleManager {
 	
 	private static Logger logger = LogManager.getLogger(LocaleManager.class.getName());
@@ -72,15 +71,22 @@ public class LocaleManager {
 		
 		List<Locale> matched = null;
 		
-		// Si viene directamente un locale como string como habitualmente
-		// lo conocemos en java. Ejemplo: gl_ES, es_ES, en_GB.
+		// En primer lugar vemos es directamente un locale como string como 
+		// lo conocemos habitualmente en java, por ejemplo: gl_ES, es_ES, en_GB,
+		// ya que una vez inicializado será más rápido.
 		// En este caso no es válido new Locale(String), con un solo parámetro
 		// sino que habría que usar new Locale(String, String). 
 		// Como no reinventamos la rueda, y para evitar todo lo siguiente,
 		// que en muchos casos es innecesarios, usamos directamente,
-		// (ver javadoc de commons-lang LocaleUtils.toLocale)
-		Locale locale = LocaleUtils.toLocale(ranges); 
-		if (getSupportedLocales().contains(locale)) {
+		// (ver javadoc de commons-lang LocaleUtils.toLocale)		
+		Locale locale = null;
+		try {
+			locale = LocaleUtils.toLocale(ranges);
+		} catch (IllegalArgumentException iae) {
+			// Nothing TODO
+			// Significa que viene de un header con  IETF BCP 47 o similar.			
+		}
+		if (locale!=null && getSupportedLocales().contains(locale)) {
 			// Se ha comprobado el contains por Locale funciona como se espera
 			if (getSupportedLocales().contains(locale)) {
 				if (logger.isDebugEnabled()) {

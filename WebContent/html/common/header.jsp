@@ -6,8 +6,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-<fmt:setBundle basename="resources.Messages" var="traducciones" scope="session"/>
 <fmt:setLocale value="${sessionScope['user-locale']}" scope="session"/>
+<fmt:setBundle basename="resources.Messages" var="traducciones" scope="session"/>
+
 
 <!DOCTYPE html>
 <html>
@@ -34,10 +35,9 @@
 			</a>	
 			<ul class="menu">
 				<li><a href="<%=request.getContextPath()+ViewPaths.HOME%>">Home</a></li>
-				<li><a href="#">
-</a></li>
+				<li><a href="#"><fmt:message key = "lista" bundle="${traducciones}"/></a></li>
 				<li><a href="#"><fmt:message key = "favoritos" bundle="${traducciones}"/></a></li>
-				<li><a href="#"><fmt:message key = "carrito" bundle="${traducciones}"/></a></li>
+				<li><a href="<%=request.getContextPath()+ViewPaths.CARRITO%>"><fmt:message key = "carrito" bundle="${traducciones}"/></a></li>
 				<li>
 					<form action="<%=ControllerPaths.CONTENIDO%>" method="post">
 						<input type="hidden" name="<%=ParameterNames.ACTION%>" value="<%=Actions.BUSCAR%>" /> 

@@ -114,6 +114,25 @@ public class ValidationUtils {
 		return parameter;
 
 	}
+	
+	public static String stringOnlyNumbersValidator (String parameter, boolean isName){
+
+		parameter = ParameterUtils.trimmer(parameter);
+		
+		if(!isName) {
+			if(!stringOnlyNumbers(parameter)) {
+				parameter = null;
+			}
+		}else {
+			if(stringWithoutNumber(parameter)) {
+				parameter =  null;
+			}
+		}
+		return parameter;
+
+	}
+	
+	
 
 	private static boolean emailIsValid (String email) {
 
@@ -146,6 +165,15 @@ public class ValidationUtils {
 		Pattern p = Pattern.compile(argPattern);
 		Matcher m = p.matcher(arg);
 		return m.matches();
+	}
+	
+	private static boolean stringOnlyNumbers (String arg) {
+
+		String argPattern = "[0-9]+";
+		Pattern p = Pattern.compile(argPattern);
+		Matcher m = p.matcher(arg);
+		return m.matches();
+
 	}
 
 }

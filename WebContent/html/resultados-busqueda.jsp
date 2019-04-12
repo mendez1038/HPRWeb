@@ -1,11 +1,14 @@
 <%@ page import="com.hpr.web.controller.Actions"%>
     
-<div id="buscador-resultados">	
+<div id="buscador-resultados">
+
+		
 	<h3>hola</h3>
 	<c:if test="${not empty resultados}">
-	
+		test="$requestScope.resultados"
 			<p><fmt:message key = "resultados" bundle="${traducciones}"/></p>
 			<ul>
+			<div>
 			<c:forEach items="${resultados}" var="r">
 					
 					<c:url var="urlDetalle" scope="page" value="contenido">
@@ -18,6 +21,6 @@
 			</c:forEach>
 			</ul>
 			
-	
+			</div>
 	</c:if>
 </div>	

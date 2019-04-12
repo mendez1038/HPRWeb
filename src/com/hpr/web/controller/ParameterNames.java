@@ -25,6 +25,7 @@ public interface ParameterNames {
 	public static final String LOCALE="locale";
 	public static final String EN="en";
 	public static final String ES="es";
+	public static final String PAGE="page";
 	
 	
 	

@@ -69,7 +69,6 @@ public class UsuarioServlet extends HttpServlet {
 			// Limpieza
 
 			email = ParameterUtils.trimmer(email);
-			contrasena = ParameterUtils.trimmer(contrasena);
 
 			// Validacion 
 
@@ -101,7 +100,7 @@ public class UsuarioServlet extends HttpServlet {
 					logger.info("Usuario {} autenticado.", usuario.getEmail());
 				}				
 				SessionManager.set(request, SessionAttributeNames.USER, usuario);
-				CookieManager.addCookie(response, "login", usuario.getEmail(), "/", 7*24*60*60);
+				CookieManager.addCookie(response, Actions.LOGIN, usuario.getEmail(), "/", 7*24*60*60);
 				target = request.getContextPath()+ViewPaths.HOME;					
 				redirect = true;
 			}
@@ -129,7 +128,7 @@ public class UsuarioServlet extends HttpServlet {
 			try {
 				fNacimiento = fecha.parse(fechaNacimiento);
 			} catch (ParseException e1) {
-				logger.warn("Fecha  " +e1);
+				logger.warn("Fecha en un formato incorrecto  " +e1);
 				errors.add(ParameterNames.ACTION,ErrorCodes.PARSE_ERROR);
 			}
 			//validacion
@@ -150,8 +149,7 @@ public class UsuarioServlet extends HttpServlet {
 				errors.add(ParameterNames.APELLIDOS, ErrorCodes.OPTIONAL_PARAMETER);
 			}
 			
-
-			//telefono = ValidationUtils.stringOnlyLettersValidator(telefono, false);
+			telefono = ValidationUtils.stringOnlyNumbersValidator(telefono, false);
 			if(telefono == null) {
 				errors.add(ParameterNames.TELEFONO, ErrorCodes.OPTIONAL_PARAMETER);
 			}
@@ -197,7 +195,6 @@ public class UsuarioServlet extends HttpServlet {
 		}else if(Actions.PREEDICION.equalsIgnoreCase(action)) {
 			Usuario user=(Usuario) SessionManager.get(request, SessionAttributeNames.USER);
 			request.setAttribute(AttributeNames.USUARIOS, user);
-
 			target = ViewPaths.PERFIL;
 		
 		}else if(Actions.EDICION.equalsIgnoreCase(action)) {
@@ -213,7 +210,7 @@ public class UsuarioServlet extends HttpServlet {
 			try {
 				fNacimiento = fecha.parse(fechaNacimiento);
 			} catch (ParseException e1) {
-				logger.warn("Fecha  " +e1);
+				logger.warn("Fecha  en un formato incorrecto " +e1);
 				errors.add(ParameterNames.ACTION,ErrorCodes.PARSE_ERROR);
 			}
 			contrasena = ValidationUtils.passwordValidator(contrasena);
@@ -233,10 +230,10 @@ public class UsuarioServlet extends HttpServlet {
 				errors.add(ParameterNames.GENERO, ErrorCodes.OPTIONAL_PARAMETER);
 			}
 
-			//telefono = ValidationUtils.stringOnlyLettersValidator(telefono, false);
-//			if(telefono == null) {
-//				errors.add(ParameterNames.TELEFONO, ErrorCodes.OPTIONAL_PARAMETER);
-//			}
+			telefono = ValidationUtils.stringOnlyNumbersValidator(telefono, false);
+			if(telefono == null) {
+				errors.add(ParameterNames.TELEFONO, ErrorCodes.OPTIONAL_PARAMETER);
+			}
 			Usuario update=new Usuario();
 			update.setContrasena(contrasena);
 			update.setNombre(nombre);
@@ -253,8 +250,6 @@ public class UsuarioServlet extends HttpServlet {
 			} catch (DataException e) {
 				logger.info(e.getMessage(),e);
 			}
-			
-			
 			target = ControllerPaths.USUARIO+"?"+ParameterNames.ACTION+"="+Actions.PREEDICION;
 			redirect=true;
 		}else if (Actions.CAMBIAR_IDIOMA.equalsIgnoreCase(action)) {
@@ -276,7 +271,6 @@ public class UsuarioServlet extends HttpServlet {
 			if (logger.isDebugEnabled()) {
 				logger.debug("Locale changed to "+newLocale);
 			}
-
 			target=request.getHeader(ViewPaths.REFERER);
 			redirect=true;
 			

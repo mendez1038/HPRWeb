@@ -44,7 +44,8 @@ public class LocaleFilter implements Filter {
 
 	}
 
-	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) 
+			throws IOException, ServletException {
 		
 		HttpServletRequest httpRequest = ((HttpServletRequest) request);
 		HttpServletResponse httpResponse = ((HttpServletResponse) response);
@@ -65,9 +66,9 @@ public class LocaleFilter implements Filter {
 				// un parametro de la request, tambien cuando viene de una cookie hay que
 				// pasarlo por:
 				
-				locale = getLocale(cookieLocale.getValue());
+				locale = new Locale(cookieLocale.getValue());
 				if (locale!=null && logger.isDebugEnabled()) {
-					logger.debug("Locale initialized from cookie: "+locale);
+					logger.debug("Locale initialized from cookie: "+cookieLocale.getValue());
 				}				
 			} else {
 				// En ultimo término, a modo de "por defecto", inicializamos a partir 
@@ -98,13 +99,10 @@ public class LocaleFilter implements Filter {
 
 	protected Locale getLocale(HttpServletRequest httpRequest) {			
 		String acceptLanguageHeader = httpRequest.getHeader("Accept-Language");
-		return getLocale(acceptLanguageHeader);		       
-	}
-	
-	protected Locale getLocale(String ranges) {
+		
 		// Miramos cuales de los lenguajes establecidos por el usuario en su navegador
 		// son soportados por nuesetra web
-		List<Locale> matchedLocales = LocaleManager.getMatchedLocales(ranges);
+		List<Locale> matchedLocales = LocaleManager.getMatchedLocales(acceptLanguageHeader);
 		
 		Locale locale = null;
 		if (matchedLocales.size()>0) {
@@ -113,7 +111,7 @@ public class LocaleFilter implements Filter {
 				logger.debug("Matched "+matchedLocales.size()+" locales. Selected: "+locale);
 			}
 		} else {
-			logger.warn("No matched locale: "+ranges);
+			logger.warn("No matched locale: "+acceptLanguageHeader);
 		}
 		return locale;
 
