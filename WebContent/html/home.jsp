@@ -6,13 +6,32 @@
 
 	<%
 		List<Contenido> all= (List<Contenido>) request.getAttribute(AttributeNames.RESULTADOS_VENTAS);
-		
+		List<Contenido> rebajas= (List<Contenido>) request.getAttribute(AttributeNames.RESULTADOS_REBAJAS);
+		List<Contenido> novedades= (List<Contenido>) request.getAttribute(AttributeNames.RESULTADOS_NOVEDADES);
 	%>
 	
 	
 		<h3><fmt:message key = "bienvenida" bundle="${traducciones}"/></h3>	
 		
 		<h2><fmt:message key = "novedades" bundle="${traducciones}"/></h2>
+		<%
+	
+			
+		if (novedades!=null && !novedades.isEmpty()) {
+			%>
+			<%
+			for (Contenido resultado: novedades) {
+				%>
+				<div>
+				<a class="a2" href="<%=ControllerPaths.CONTENIDO%>?
+						<%=ParameterNames.ACTION%>=<%=Actions.BUSCAR_ID%>&amp;<%=ParameterNames.ID%>=
+						<%=resultado.getIdContenido()%>">
+						<p><%=resultado.getTitulo()%></p>
+				</a>
+				
+				</div>
+				<%}%>
+			<%}%>
 		
 		<h2><fmt:message key = "masvendidos" bundle="${traducciones}"/></h2>
 		<%
@@ -78,6 +97,24 @@
 					
 		<%}%>
 		<h2><fmt:message key = "rebajas" bundle="${traducciones}"/></h2>
+		<%
+	
+			
+		if (rebajas!=null && !rebajas.isEmpty()) {
+			%>
+			<%
+			for (Contenido resultado: rebajas) {
+				%>
+				<div>
+				<a class="a2" href="<%=ControllerPaths.CONTENIDO%>?
+						<%=ParameterNames.ACTION%>=<%=Actions.BUSCAR_ID%>&amp;<%=ParameterNames.ID%>=
+						<%=resultado.getIdContenido()%>">
+						<p><%=resultado.getTitulo()%></p>
+				</a>
+				
+				</div>
+				<%}%>
+			<%}%>	
 		
 </div>
 

@@ -44,8 +44,8 @@ public class InitSessionFilter implements Filter{
 			session = httpRequest.getSession(true);
 			
 			// Estado comun requerido
-			Carrito c = new Carrito();
-			SessionManager.set(httpRequest, SessionAttributeNames.CARRITO, c);
+//			Carrito c = new Carrito();
+//			SessionManager.set(httpRequest, SessionAttributeNames.CARRITO, c);
 		} 
 		
 		// Continuar la invocacion de la cadena de responsabilidad.

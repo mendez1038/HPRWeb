@@ -6,6 +6,8 @@ public interface AttributeNames {
 	public static final String USUARIOS = "usuarios";
 	public static final String RESULTADOS = "resultados";
 	public static final String RESULTADOS_VENTAS = "resultados_ventas";
+	public static final String RESULTADOS_REBAJAS = "resultados_rebajas";
+	public static final String RESULTADOS_NOVEDADES = "resultados_novedades";
 	public static final String CONTENIDO = "contenido";
 	public static final String TOTAL = "total";
 	public static final String TOTAL_PAGES = "totalPages";

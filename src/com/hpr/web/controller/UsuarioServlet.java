@@ -101,7 +101,7 @@ public class UsuarioServlet extends HttpServlet {
 				}				
 				SessionManager.set(request, SessionAttributeNames.USER, usuario);
 				CookieManager.addCookie(response, Actions.LOGIN, usuario.getEmail(), "/", 7*24*60*60);
-				target = request.getContextPath()+ViewPaths.HOME;					
+				target = request.getContextPath();					
 				redirect = true;
 			}
 		} else if (Actions.LOGOUT.equalsIgnoreCase(action)) {

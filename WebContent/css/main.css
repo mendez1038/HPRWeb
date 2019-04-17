@@ -1,4 +1,3 @@
-/* login */
 
 * {
 	margin: 0;
@@ -7,6 +6,18 @@
 	/* background-image: URL(wallpaper.jpg) no-repeat; */  
 	background-size: cover;
 }
+/* home*/
+#home {
+	background: darkgray;
+	width:90%;
+	float:left;
+	display:block;
+	
+}
+#home a{
+	color: black;
+}
+/* login */
 .login-form {
 	padding: 40px;
     width: 280px;
@@ -74,11 +85,19 @@ a:hover {
 }
 
 /* header*/
-
+#header {
+	width: 95%;
+	margin: 0 3% auto;
+}
+#header a {
+	    font-size: 1.3em;
+    	font-weight: 550;
+}
 #nav {
 	top:0px;
-    width: 90%;
-    margin: 0  5% auto;   
+    width: 90%; 
+    float: left; 
+    display: inline; 
 }
 #nav ul {
     list-style: none;
@@ -122,18 +141,39 @@ a:hover {
 }
 #user {
 	position: relative;
-	left:10%;
+	left:1%;
+}
+#user a {
+    font-size: 1em;
+    font-weight: 100;
 }
 #logo {
 	padding: 0px;
+	margin:0px;
     text-decoration: none;
     display: inline-block;
     vertical-align: middle;
     cursor: pointer;
-    margin-right: 25px;
     background-color: transparent;
+    float: left;
 }
-
+#nav .boton {
+	display: inline;
+	
+}
+#submenu {
+	display: inline;
+}
+#submenu a {
+    font-size: 1em;
+    font-weight: 100;
+}
+#buscador {
+	font-size:1em;
+	box-sizing: border-box;
+	border-radius: 20px;
+	padding-left: 10px;
+}
 /* footer */
 
 #footer {

@@ -28,23 +28,25 @@
 
 	<div id="header">
 		
-
+		<a id="logo" href="<%=request.getContextPath()%>">
+				<img src="<%=request.getContextPath()%>/imgs/logo.png" width="80px"height="49px" alt="Logo HPRWEB">
+			</a>
 		<div id="nav">
-			<a id="logo" href="<%=request.getContextPath()+ViewPaths.HOME%>">
-				<img src="<%=request.getContextPath()%>/imgs/logo.png" width="80px"height="48px" alt="Logo HPRWEB">
-			</a>	
+				
 			<ul class="menu">
-				<li><a href="<%=request.getContextPath()+ViewPaths.HOME%>">Home</a></li>
+				<li><a href="<%=request.getContextPath()%>"><fmt:message key = "inicio" bundle="${traducciones}"/></a></li>
 				<li><a href="#"><fmt:message key = "lista" bundle="${traducciones}"/></a></li>
 				<li><a href="#"><fmt:message key = "favoritos" bundle="${traducciones}"/></a></li>
 				<li><a href="<%=request.getContextPath()+ViewPaths.CARRITO%>"><fmt:message key = "carrito" bundle="${traducciones}"/></a></li>
 				<li>
 					<form action="<%=ControllerPaths.CONTENIDO%>" method="post">
 						<input type="hidden" name="<%=ParameterNames.ACTION%>" value="<%=Actions.BUSCAR%>" /> 
-						<input type="text" name="<%=ParameterNames.TITULO%>" value="<%=ParameterUtils.getParameter(request, ParameterNames.TITULO)%>"placeholder="<fmt:message key = "busqueda" bundle="${traducciones}"/>" />
-						<input type="submit" value="<fmt:message key = "buscar" bundle="${traducciones}"/>">
+						<input id="buscador" type="text" name="<%=ParameterNames.TITULO%>" value="<%=ParameterUtils.getParameter(request, ParameterNames.TITULO)%>"placeholder="<fmt:message key = "busqueda" bundle="${traducciones}"/>" />
+						<input class="boton" type="submit" value="<fmt:message key = "buscar" bundle="${traducciones}"/>">
 					</form>
-					<button ><fmt:message key = "filtros" bundle="${traducciones}"/></button>
+				</li>
+				<li>
+					<button class="boton"><fmt:message key = "filtros" bundle="${traducciones}"/></button>
 				</li>
 
 		<c:choose>
@@ -58,13 +60,16 @@
 					</ul></li>
 		</c:when>
 		<c:otherwise>
-				
+				<li>
 				<form method="get">
-					<button type="submit" formaction="<%=request.getContextPath() + ViewPaths.LOGIN%>"><fmt:message key = "iniciosesion" bundle="${traducciones}"/></button> 
+					<button class="boton" type="submit" formaction="<%=request.getContextPath() + ViewPaths.LOGIN%>"><fmt:message key = "iniciosesion" bundle="${traducciones}"/></button> 
 				</form>
-				<form action="get">
-					<button type="submit" formaction="<%=request.getContextPath() + ViewPaths.REGISTRO%>"><fmt:message key = "registro" bundle="${traducciones}"/></button>
+				</li>
+				<li>
+				<form method="get">
+					<button class="boton" type="submit" formaction="<%=request.getContextPath() + ViewPaths.REGISTRO%>"><fmt:message key = "registro" bundle="${traducciones}"/></button>
 				</form>
+				</li>
 		</c:otherwise>
 		</c:choose>
 			</ul>

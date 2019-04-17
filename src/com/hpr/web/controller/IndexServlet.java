@@ -46,9 +46,15 @@ public class IndexServlet extends HttpServlet {
 				getPageNumber(request.getParameter(ParameterNames.PAGE), 1);
 		
 		Results<Contenido> all;
+		Results<Contenido> rebajas;
+		Results<Contenido> novedades;
 		try {
 			all = servicio.findAllByVentas(idiomaPagina, (page-1)*pageSize+1, pageSize);
+			rebajas = servicio.findAllByRebajas(idiomaPagina, page, pageSize);
+			novedades = servicio.findAllByDate(idiomaPagina, page, pageSize);
 			request.setAttribute(AttributeNames.RESULTADOS_VENTAS, all.getPage());
+			request.setAttribute(AttributeNames.RESULTADOS_REBAJAS, rebajas.getPage());
+			request.setAttribute(AttributeNames.RESULTADOS_NOVEDADES, novedades.getPage());
 			request.setAttribute(AttributeNames.TOTAL, all.getTotal());
 			
 			int totalPages = (int) Math.ceil(all.getTotal()/(double)pageSize);

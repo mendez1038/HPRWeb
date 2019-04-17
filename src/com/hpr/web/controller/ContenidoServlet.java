@@ -15,18 +15,14 @@ import org.apache.logging.log4j.Logger;
 import com.david.training.exceptions.DataException;
 import com.david.training.model.Contenido;
 import com.david.training.model.ProductoCriteria;
-import com.david.training.service.CategoriaService;
 import com.david.training.service.ContenidoService;
-import com.david.training.service.PaisService;
 import com.david.training.service.Results;
-import com.david.training.service.TipoContenidoService;
-import com.david.training.service.impl.CategoriaServiceImpl;
 import com.david.training.service.impl.ContenidoServiceImpl;
-import com.david.training.service.impl.PaisServiceImpl;
-import com.david.training.service.impl.TipoContenidoServiceImpl;
 import com.hpr.web.model.ErrorCodes;
 import com.hpr.web.model.Errors;
+import com.hpr.web.util.SessionManager;
 import com.hpr.web.util.ValidationUtils;
+import com.hpr.web.util.WebConstants;
 import com.mysql.cj.util.StringUtils;
 @WebServlet("/contenido")
 public class ContenidoServlet extends HttpServlet {
@@ -61,6 +57,8 @@ public class ContenidoServlet extends HttpServlet {
 		Errors errors = new Errors(); 
 		String target = null;
 		boolean redirect = false;
+		String idioma=SessionManager.get(request,WebConstants.USER_LOCALE).toString().substring(0,2).toUpperCase();
+		
 
 		if (Actions.BUSCAR.equalsIgnoreCase(action)) {
 			Results<Contenido> resultados = null;
@@ -86,7 +84,7 @@ public class ContenidoServlet extends HttpServlet {
 				
 				try {
 					pc.setTitulo(texto);
-					resultados = servicio.busquedaEstructurada(pc, "es", 1, 3);
+					resultados = servicio.busquedaEstructurada(pc, idioma, 1, 3);
 					
 					if ( resultados!=null) {
 						
@@ -125,16 +123,15 @@ public class ContenidoServlet extends HttpServlet {
 
 			Contenido contenidoDetalle = new Contenido();
 			try {				
-				contenidoDetalle = servicio.findById(id, "es");
+				contenidoDetalle = servicio.findPorId(id, idioma);
 				if (contenidoDetalle==null ) {
 					request.setAttribute(AttributeNames.ERRORS, errors);
 					target = ViewPaths.HOME;
 				} else {	
-					target = ViewPaths.VISTA_DETALLE;
+					
 					request.setAttribute(SessionAttributeNames.CONTENIDO, contenidoDetalle);
-		
+					target = ViewPaths.VISTA_DETALLE;
 				}
-					request.getRequestDispatcher(target).forward(request, response);
 			} catch (DataException e) {
 				logger.warn("Detalle... "+id, e);
 				errors.add(ParameterNames.ACTION,ErrorCodes.DETALLE_ERROR);

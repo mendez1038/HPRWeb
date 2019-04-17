@@ -22,8 +22,6 @@ import com.hpr.web.util.LocaleManager;
 import com.hpr.web.util.SessionManager;
 import com.hpr.web.util.WebConstants;
 
-
-
 /**
  * Filtro para inicializacion del Locale
  */
