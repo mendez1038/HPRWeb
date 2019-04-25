@@ -1,9 +1,5 @@
-<%@ page import="java.util.List" %>
-<%@ page import="com.hpr.web.controller.*, com.hpr.web.model.*" %>
+<%@ page import="com.hpr.web.model.*,com.hpr.web.controller.*, java.util.List" %>
 <%
-	List<String> parameterErrors = errors.getErrors(ParameterNames.ACTION);
-	for (String error: parameterErrors) {
-			%><li><%=error%></li>
-	<%
-	}
+	Errors errors = (Errors) request.getAttribute(AttributeNames.ERRORS);
+	if (errors == null) errors = new Errors();
 %>

@@ -4,5 +4,6 @@ public interface ControllerPaths {
 
 	public static final String USUARIO = "/HPRWEB/usuarios";
 	public static final String CONTENIDO = "/HPRWEB/contenido";
+	public static final String CARRITO = "/HPRWEB/carrito";
 	
 }

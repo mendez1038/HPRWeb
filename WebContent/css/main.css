@@ -6,6 +6,7 @@
 	/* background-image: URL(wallpaper.jpg) no-repeat; */  
 	background-size: cover;
 }
+
 /* home*/
 #home {
 	background: darkgray;
@@ -19,6 +20,7 @@
 }
 /* login */
 .login-form {
+	overflow: hidden;
 	padding: 40px;
     width: 280px;
     position: absolute;
@@ -177,6 +179,7 @@ a:hover {
 /* footer */
 
 #footer {
+	width: 100%;
 	height: 100px;
 	background: gray;
 	position: relative;

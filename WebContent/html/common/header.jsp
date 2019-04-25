@@ -55,6 +55,7 @@
 				<li id="user"><a>${sessionScope['user'].email}</a>
 					<ul class="submenu">
 						<li><a href="<%=request.getContextPath()+ViewPaths.PERFIL%>"><fmt:message key = "cuenta" bundle="${traducciones}"/></a></li>
+						<li><a href="<%=request.getContextPath()+ViewPaths.HISTORIAL%>"><fmt:message key = "historial" bundle="${traducciones}"/></a></li>
 						<li><a
 							href="<%=ControllerPaths.USUARIO%>?action=<%=Actions.LOGOUT%>"><fmt:message key = "cerrarsesion" bundle="${traducciones}"/></a></li>
 					</ul></li>

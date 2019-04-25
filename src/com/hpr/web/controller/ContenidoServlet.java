@@ -59,10 +59,12 @@ public class ContenidoServlet extends HttpServlet {
 		boolean redirect = false;
 		String idioma=SessionManager.get(request,WebConstants.USER_LOCALE).toString().substring(0,2).toUpperCase();
 		
+		
 
 		if (Actions.BUSCAR.equalsIgnoreCase(action)) {
 			Results<Contenido> resultados = null;
 			ProductoCriteria pc = new ProductoCriteria();
+			StringBuilder targetString = new StringBuilder();
 			
 			String texto = request.getParameter(ParameterNames.TITULO);
 //			String[] generos = request.getParameterValues(ParameterNames.GENERO);
@@ -75,16 +77,18 @@ public class ContenidoServlet extends HttpServlet {
 //			String[] pais = request.getParameterValues(ParameterNames.PAIS);
 //			String duracion = request.getParameter(ParameterNames.DURACION);
 
-			
+			try {
 			if(texto!=null && !StringUtils.isEmptyOrWhitespaceOnly(texto)) {
 				texto = ValidationUtils.stringOnlyLettersValidator(texto, false);
 				
+				pc.setTitulo(texto);
+				targetString.append("&titulo="+pc.getTitulo());
 				}
 
 				
-				try {
-					pc.setTitulo(texto);
-					resultados = servicio.busquedaEstructurada(pc, idioma, 1, 3);
+				
+					
+				resultados = servicio.busquedaEstructurada(pc, idioma, 1, 3);
 					
 					if ( resultados!=null) {
 						
@@ -118,12 +122,12 @@ public class ContenidoServlet extends HttpServlet {
 			//vista detalle
 		} else if(Actions.BUSCAR_ID.equalsIgnoreCase(action)) {
 		
-			String idParamValue = request.getParameter(ParameterNames.ID);
-			Integer id = Integer.valueOf(idParamValue);
-
+			
+			Integer idContendio = Integer.valueOf(request.getParameter(ParameterNames.ID));
+			
 			Contenido contenidoDetalle = new Contenido();
 			try {				
-				contenidoDetalle = servicio.findPorId(id, idioma);
+				contenidoDetalle = servicio.findPorId(idContendio, idioma);
 				if (contenidoDetalle==null ) {
 					request.setAttribute(AttributeNames.ERRORS, errors);
 					target = ViewPaths.HOME;
@@ -132,17 +136,18 @@ public class ContenidoServlet extends HttpServlet {
 					request.setAttribute(SessionAttributeNames.CONTENIDO, contenidoDetalle);
 					target = ViewPaths.VISTA_DETALLE;
 				}
+				
 			} catch (DataException e) {
-				logger.warn("Detalle... "+id, e);
+				logger.warn("Detalle... "+idContendio, e);
 				errors.add(ParameterNames.ACTION,ErrorCodes.DETALLE_ERROR);
+				target = ViewPaths.INDEX;
 			}
-//			request.setAttribute(AttributeNames.CONTENIDO, contenidoDetalle);
 
 		
 		} else {
 			// Mmm...
 			logger.error("Action desconocida");
-			target = ViewPaths.HOME;
+			target = ViewPaths.INDEX;
 		}
 
 		if (redirect) {

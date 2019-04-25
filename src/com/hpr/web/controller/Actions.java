@@ -10,5 +10,7 @@ public interface Actions {
 	public static final String CAMBIAR_IDIOMA = "cambiar_idioma";
 	public static final String EDICION = "edicion";
 	public static final String PREEDICION = "preedicion";
+	public static final String ANADIR = "anadir";
+	public static final String ELIMINAR = "eliminar";
 	
 }
