@@ -35,8 +35,8 @@ public class CarritoServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String action= request.getParameter(ParameterNames.ACTION);
 		String target = request.getHeader(ViewPaths.REFERER);
-//		Integer idContenido = Integer.valueOf(request.getParameter(ParameterNames.ID));
-		Integer idContenido = 10;
+		Integer idContenido = Integer.valueOf(request.getParameter(ParameterNames.ID));
+		
 		
 		if(Actions.ANADIR.equalsIgnoreCase(action)) {
 				try {

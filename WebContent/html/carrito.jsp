@@ -9,7 +9,7 @@
                    	<%-- <img src="<%=request.getContextPath()%>/imgs/icojuego/<%=lineaCarrito.getContenido().getIdContenido()%>.jpg"></img> --%>
                     <div>${lineas.getContenido().getTitulo()}</div>
                     <div><span>${lineas.getContenido().getPrecio()} $</span></div>
-                    <a class="enlace" href="<%=ControllerPaths.CARRITO %>?<%=ParameterNames.ACTION%>=<%=Actions.ELIMINAR%>&amp;${lineas.getContenido().getIdContenido()}">X</a>
+                    <a class="enlace" href="<%=ControllerPaths.CARRITO %>?<%=ParameterNames.ACTION%>=<%=Actions.ELIMINAR%>&amp;<%=ParameterNames.ID%>=${lineas.getContenido().getIdContenido()}">X</a>
                 </div>
 			</c:forEach>
 		</c:when>

@@ -22,6 +22,7 @@
 	<div class="addCarrito">
 			<form action="<%=ControllerPaths.CARRITO%>" method="post">
 			<input type="hidden" name="<%=ParameterNames.ACTION%>" value="<%=Actions.ANADIR%>"/>
+			<input type="hidden" name="<%=ParameterNames.ID%>" value="<%=contenido.getIdContenido()%>"/>
 			<input type="submit" value="Anadir al Carrito"/>
 			</form>
 	</div>

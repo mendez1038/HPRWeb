@@ -16,7 +16,7 @@
 				<option value="F">Femenino</option>
 				<option value="O">Otro</option>
 			</select>
-			<label><fmt:message key = "fechanacimiento" bundle="${traducciones}"/></label><input type="date" name="<%=ParameterNames.FECHA_NACIMIENTO%>" placeholder="${sessionScope['user'].fechaNacimiento}">
+			<label><fmt:message key = "fechanacimiento" bundle="${traducciones}"/>: ${sessionScope['user'].fechaNacimiento}</label>
 			<label><fmt:message key = "telefono" bundle="${traducciones}"/></label><input type="text" name="<%=ParameterNames.TELEFONO%>" placeholder="${sessionScope['user'].telefono}">
 			<input type="submit" value="<fmt:message key = "guardar" bundle="${traducciones}"/>" />
 		</form>

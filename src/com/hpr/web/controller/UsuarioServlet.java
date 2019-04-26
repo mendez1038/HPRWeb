@@ -111,9 +111,6 @@ public class UsuarioServlet extends HttpServlet {
 		}else if (Actions.PREREGISTRO.equalsIgnoreCase(action)) {
 			target= ViewPaths.REGISTRO;
 		}else if(Actions.REGISTRO.equalsIgnoreCase(action)) {
-			target = null;
-    		redirect = false;
-			
 			//Recuperamos parametros
 
 			String email =  request.getParameter(ParameterNames.EMAIL);
@@ -153,9 +150,9 @@ public class UsuarioServlet extends HttpServlet {
 			if(telefono == null) {
 				errors.add(ParameterNames.TELEFONO, ErrorCodes.OPTIONAL_PARAMETER);
 			}
-
+		
 			Usuario u = new Usuario();
-			
+			if (!errors.hasErrors()) {
 				u.setEmail(email);
 				u.setContrasena(contrasena);
 				u.setNombre(nombre);
@@ -163,29 +160,28 @@ public class UsuarioServlet extends HttpServlet {
 				u.setGenero(genero);
 				u.setFechaNacimiento(fNacimiento);
 				u.setTelefono(telefono);
+			}
 			
-
-			u = (Usuario) SessionManager.get(request, AttributeNames.USUARIOS);
-
+			try {	
+				 servicio.signUp(u);
 			
-				try {	
-					 servicio.signUp(u);
-					if (u == null) {
-						
-						if (logger.isDebugEnabled()) {
-							logger.debug("Registro fallido: {}", errors);
-						}
-						//errors.add(ParameterNames.ACTION,ErrorCodes.SIGNUP_ERROR);
-						request.setAttribute(AttributeNames.ERRORS, AttributeNames.DUPLICATED_USER);
-						target = ViewPaths.REGISTRO;
-					} else {
-						if (logger.isDebugEnabled()) {
-							logger.info("Usuario {} registrado.", u.getEmail());
-						}				
-						SessionManager.set(request, SessionAttributeNames.USER, u);						
-						target = ViewPaths.HOME;
-						redirect = true;
-					}
+			if (errors.hasErrors()) {	
+				if (logger.isDebugEnabled()) {
+					logger.debug("Registro fallido: {}", errors);
+				}				
+				request.setAttribute(AttributeNames.ERRORS, errors);				
+				target = ViewPaths.REGISTRO;				
+			} else {			
+				if (logger.isDebugEnabled()) {
+					logger.info("Usuario {} registrado.", u.getEmail());
+				}				
+				SessionManager.set(request, SessionAttributeNames.USER, u);						
+				target = request.getContextPath() + ViewPaths.INDEX;
+				redirect = true;					
+			}
+			
+				
+					
 				} catch (MailException e) {
 					errors.add(Actions.REGISTRO, ErrorCodes.MAIL_ERROR);
 				} catch (DataException e) {
@@ -203,16 +199,8 @@ public class UsuarioServlet extends HttpServlet {
 			String nombre=request.getParameter(ParameterNames.NOMBRE);
 			String apellidos=request.getParameter(ParameterNames.APELLIDOS);
 			String genero=request.getParameter(ParameterNames.GENERO);
-			String fechaNacimiento = request.getParameter(ParameterNames.FECHA_NACIMIENTO);
 			String telefono=request.getParameter(ParameterNames.TELEFONO);	
-			SimpleDateFormat fecha = (SimpleDateFormat) DateUtils.SHORT_FORMAT_DATE;
-			Date fNacimiento = null;
-			try {
-				fNacimiento = fecha.parse(fechaNacimiento);
-			} catch (ParseException e1) {
-				logger.warn("Fecha  en un formato incorrecto " +e1);
-				errors.add(ParameterNames.ACTION,ErrorCodes.PARSE_ERROR);
-			}
+			
 			contrasena = ValidationUtils.passwordValidator(contrasena);
 			if(contrasena == null) {
 				errors.add(ParameterNames.CONTRASENA, ErrorCodes.OPTIONAL_PARAMETER);
@@ -239,7 +227,6 @@ public class UsuarioServlet extends HttpServlet {
 			update.setNombre(nombre);
 			update.setApellidos(apellidos);
 			update.setGenero(genero);
-			update.setFechaNacimiento(fNacimiento);
 			update.setTelefono(telefono);
 			update.setEmail(user.getEmail());
 			
@@ -276,7 +263,8 @@ public class UsuarioServlet extends HttpServlet {
 			
 		}else {
 			logger.error("Action desconocida");
-			target = ViewPaths.INDEX;
+			target = request.getContextPath() + ViewPaths.INDEX;
+			
 		}
 		if (redirect) {
 			logger.info("Redirecting to "+target);
