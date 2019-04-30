@@ -10,6 +10,7 @@ public interface SessionAttributeNames {
 	public static final String ID_CONTENIDO = "id_contenido";
 	public static final String NOMBRE_CONTENIDO = "nombre_contenido";
 	public static final String PRECIO = "precio";
+	public static final String URL = "url";
 	
 
 }

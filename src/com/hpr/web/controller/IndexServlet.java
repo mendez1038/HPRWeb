@@ -45,19 +45,14 @@ public class IndexServlet extends HttpServlet {
 		int page = WebUtils.
 				getPageNumber(request.getParameter(ParameterNames.PAGE), 1);
 		
-		Results<Contenido> all;
-		Results<Contenido> rebajas;
 		Results<Contenido> novedades;
 		try {
-			all = servicio.findAllByVentas(idiomaPagina, (page-1)*pageSize+1, pageSize);
-			rebajas = servicio.findAllByRebajas(idiomaPagina, page, pageSize);
-			novedades = servicio.findAllByDate(idiomaPagina, page, pageSize);
-			request.setAttribute(AttributeNames.RESULTADOS_VENTAS, all.getPage());
-			request.setAttribute(AttributeNames.RESULTADOS_REBAJAS, rebajas.getPage());
+
+			novedades = servicio.findAllByDate(idiomaPagina, (page-1)*pageSize+1, pageSize);
 			request.setAttribute(AttributeNames.RESULTADOS_NOVEDADES, novedades.getPage());
-			request.setAttribute(AttributeNames.TOTAL, all.getTotal());
+			request.setAttribute(AttributeNames.TOTAL, novedades.getTotal());
 			
-			int totalPages = (int) Math.ceil(all.getTotal()/(double)pageSize);
+			int totalPages = (int) Math.ceil(novedades.getTotal()/(double)pageSize);
 			int firstPagedPage = Math.max(1, page-pagingPageCount);
 			int lastPagedPage = Math.min(totalPages, page+pagingPageCount);
 			request.setAttribute(ParameterNames.PAGE, page);

@@ -19,6 +19,6 @@
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/servlet-api.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/smtp.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/c3p0-0.9.5.2.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/HPRServices.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/HPRServices.jar" sourcepath="/HPRServices"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

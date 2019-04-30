@@ -14,7 +14,9 @@ public interface AttributeNames {
 	public static final String FIRST_PAGED_PAGES = "firstPagedPage";
 	public static final String LAST_PAGED_PAGES = "lastPagedPage";
 	public static final String YA_EN_CARRITO = "ya_en_carrito";
-	
+	public static final String CATEGORIAS = "categorias";
+	public static final String TIPOS = "tipos";
+	public static final String PAISES = "paises";
 	
 	
 

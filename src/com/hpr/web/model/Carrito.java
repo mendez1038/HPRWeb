@@ -72,6 +72,7 @@ public class Carrito {
 				checkDuplicate=false;
 				lineaCarrito.setContenido(c);
 				lineaCarrito.setPrecio(c.getPrecio());
+				lineaCarrito.setPrecioDescontado(c.getPrecioDescontado());
 				lineas.add(lineaCarrito);
 				calculateOrderTotal();
 			}else {
@@ -99,7 +100,7 @@ public class Carrito {
 		  double totalCarrito = 0;
 		  for(int contador=0;contador<lineas.size(); contador++) {
 			  LineaCarrito linea = (LineaCarrito) lineas.get(contador);
-			  totalCarrito+=linea.getPrecio();
+			  totalCarrito+=linea.getPrecio()-linea.getPrecioDescontado();
 		    
 		  }
 		  setTotal(totalCarrito);

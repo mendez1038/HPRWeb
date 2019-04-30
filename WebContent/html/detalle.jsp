@@ -8,9 +8,11 @@
 			
 			
 		%>
-	
+	<div id="titulo">
 	<h1><%=contenido.getTitulo()%></h1>
 	<img src="<%=contenido.getPortada()%>" width="500px">
+	</div>
+	<div id="info">
 	<p><fmt:message key = "fechalanzamiento" bundle="${traducciones}"/>: <%=contenido.getFechaLanzamiento()%></p>
 	<p><fmt:message key = "restriccionedad" bundle="${traducciones}"/>: <%=contenido.getRestriccionEdad()%></p>
 	<p><fmt:message key = "descripcion" bundle="${traducciones}"/>: <%=contenido.getDescripcionBreve()%></p>
@@ -23,10 +25,10 @@
 			<form action="<%=ControllerPaths.CARRITO%>" method="post">
 			<input type="hidden" name="<%=ParameterNames.ACTION%>" value="<%=Actions.ANADIR%>"/>
 			<input type="hidden" name="<%=ParameterNames.ID%>" value="<%=contenido.getIdContenido()%>"/>
-			<input type="submit" value="Anadir al Carrito"/>
+			<input type="submit" value="<fmt:message key = "anadircarrito" bundle="${traducciones}"/>"/>
 			</form>
 	</div>
-	
+	</div>
 	
 	
 	

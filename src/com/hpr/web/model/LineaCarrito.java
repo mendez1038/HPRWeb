@@ -6,6 +6,7 @@ public class LineaCarrito {
 	
 	private Contenido contenido = null;
 	private double precio;
+	private double precioDescontado;
 	
 	public LineaCarrito() {
 		// TODO Auto-generated constructor stub
@@ -27,4 +28,12 @@ public class LineaCarrito {
 		this.precio = precio;
 	}
 
+	public double getPrecioDescontado() {
+		return precioDescontado;
+	}
+
+	public void setPrecioDescontado(double precioDescontado) {
+		this.precioDescontado = precioDescontado;
+	}
+	
 }

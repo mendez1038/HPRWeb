@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ page
-	import="com.hpr.web.controller.*, com.hpr.web.model.*, com.david.training.model.*, com.hpr.web.util.*"%>
+	import="com.hpr.web.controller.*, com.hpr.web.model.*, com.david.training.model.*, com.david.training.service.*, com.hpr.web.util.*, java.util.List"%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -23,6 +23,12 @@
 <%
 	Errors errors = (Errors) request.getAttribute(AttributeNames.ERRORS);
 	if (errors == null) errors = new Errors();
+	
+	List<Categoria> categorias= (List<Categoria>) request.getAttribute(AttributeNames.CATEGORIAS);
+	List<TipoContenido> tipos= (List<TipoContenido>) request.getAttribute(AttributeNames.TIPOS);
+	List<Pais> paises= (List<Pais>) request.getAttribute(AttributeNames.PAISES);
+	
+	
 %>
 <body>
 
@@ -43,6 +49,49 @@
 						<input type="hidden" name="<%=ParameterNames.ACTION%>" value="<%=Actions.BUSCAR%>" /> 
 						<input id="buscador" type="text" name="<%=ParameterNames.TITULO%>" value="<%=ParameterUtils.getParameter(request, ParameterNames.TITULO)%>"placeholder="<fmt:message key = "busqueda" bundle="${traducciones}"/>" />
 						<input class="boton" type="submit" value="<fmt:message key = "buscar" bundle="${traducciones}"/>">
+						<input type="hidden" name="<%=ParameterNames.ACTION%>" value="<%=Actions.BUSCAR%>" /> 
+						  <label><fmt:message key = "categoria" bundle="${traducciones}"/></label>
+						 <select name="<%=ParameterNames.CATEGORIA%>">
+						<option selected value="null"></option> 
+						<%for(Categoria c: categorias){ %>								 
+							<option value="<%=c.getIdCategoria()%>"><%=c.getNombreCategoria() %></option>	
+						<%} %> 
+						</select> 
+						<label><fmt:message key = "restriccionedad" bundle="${traducciones}"/></label>
+						<select name="<%=ParameterNames.RESTRICCION_EDAD%>">
+							<option value="null"></option> 
+							<option value="TP"><fmt:message key = "todospublicos" bundle="${traducciones}"/></option>	
+							<option value="7+">7+</option> 
+							<option value="12+">12+</option> 
+							<option value="16+">16+</option> 
+							<option value="18+">18+</option> 
+						</select>
+						<label><fmt:message key = "tipocontenido" bundle="${traducciones}"/></label>
+						<select name="<%=ParameterNames.TIPO_CONTENIDO%>">
+						<option value="null"></option> 
+						<%for(TipoContenido tc: tipos){ %>
+							<option value="<%=tc.getIdTipoContenido()%>"><%=tc.getNombreContenido() %></option>	
+						<%} %>  
+						</select>
+						<label><fmt:message key = "pais" bundle="${traducciones}"/></label>
+						<select name="<%=ParameterNames.PAIS%>">
+						<option value="null"></option> 
+						<%for(Pais pais: paises){ %>
+							<option value="<%=pais.getIdPais()%>"><%=pais.getNombrePais() %></option>	
+						<%} %>  
+						</select>
+						<label><fmt:message key = "descuento" bundle="${traducciones}"/></label>
+						<select name="<%=ParameterNames.DESCUENTO%>" required>
+							<option value="null"></option> 
+							<option value="5">5%</option> 
+							<option value="10">10%</option> 
+							<option value="15">15%</option> 
+							<option value="25">25%</option> 
+							<option value="30">30%</option> 
+							<option value="50">50%</option> 
+						</select>
+						<input id="buscador2" type="text" name="<%=ParameterNames.ARTISTA%>" value="<%=ParameterUtils.getParameter(request, ParameterNames.ARTISTA)%>"placeholder="<fmt:message key = "busqueda2" bundle="${traducciones}"/>" />
+						
 					</form>
 				</li>
 				<li>
@@ -67,10 +116,10 @@
 				</form>
 				</li>
 				<li>
-				<form method="get">
+				 <form method="get">
 					<button class="boton" type="submit" formaction="<%=request.getContextPath() + ViewPaths.REGISTRO%>"><fmt:message key = "registro" bundle="${traducciones}"/></button>
 				</form>
-				</li>
+				</li> 
 		</c:otherwise>
 		</c:choose>
 			</ul>

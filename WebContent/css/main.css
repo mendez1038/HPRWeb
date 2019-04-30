@@ -9,14 +9,21 @@
 
 /* home*/
 #home {
-	background: darkgray;
+	
 	width:90%;
+	margin: 0 5%;
 	float:left;
 	display:block;
 	
 }
 #home a{
 	color: black;
+}
+#home .preview {
+	width: 15%;
+	height: 300px;
+	margin: 0 3%;
+	display: inline;
 }
 /* login */
 .login-form {
@@ -186,4 +193,43 @@ a:hover {
 	margin-bottom: 0%;
 	clear: both;
 	display: inline-block;
+}
+
+/* detalle*/
+
+#detalle {
+	width: 70%;
+	margin: 0 15%;
+}
+#detalle h1 {
+	font-family:
+}
+
+/*carrito*/
+#carrito {
+	width: 70%;
+	margin: 0 15%;
+}
+#carrito a {
+	color: red;
+}
+
+
+/*resultados busqueda*/
+#buscador-resultados {
+	
+	width:90%;
+	margin: 0 5%;
+	float:left;
+	display:block;
+	
+}
+#buscador-resultados a{
+	color: black;
+}
+#buscador-resultados .preview {
+	width: 15%;
+	height: 300px;
+	margin: 0 3%;
+	display: inline;
 }

@@ -19,9 +19,6 @@ import com.hpr.web.util.SessionManager;
 import com.hpr.web.util.WebConstants;
 
 
-
-
-
 @WebServlet("/carrito")
 public class CarritoServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -31,7 +28,7 @@ public class CarritoServlet extends HttpServlet {
         super();
        servicio = new ContenidoServiceImpl();
         }
-
+   
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String action= request.getParameter(ParameterNames.ACTION);
 		String target = request.getHeader(ViewPaths.REFERER);
@@ -75,7 +72,7 @@ public class CarritoServlet extends HttpServlet {
 		boolean checkDuplicated ;
 		
 		Contenido anadir = new Contenido();
-		anadir = servicio.findPorId(idContenido, idioma);
+		anadir = servicio.findById(idContenido, idioma);
 	
 		Object objCartBean = session.getAttribute(SessionAttributeNames.CARRITO);
 
