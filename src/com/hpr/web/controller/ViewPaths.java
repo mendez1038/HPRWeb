@@ -12,6 +12,7 @@ public interface ViewPaths {
 	public static final String CARRITO = "/html/carrito.jsp";
 	public static final String HISTORIAL = "/html/historial.jsp";
 	public static final String REFERER="referer";
+	public static final String FAVORITOS = "/html/favoritos.jsp";
 	
 	
 	

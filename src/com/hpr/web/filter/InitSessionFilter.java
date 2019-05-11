@@ -18,9 +18,8 @@ import com.hpr.web.controller.SessionAttributeNames;
 import com.hpr.web.model.Carrito;
 import com.hpr.web.util.SessionManager;
 
-/**
- * Servlet Filter implementation class InitSessionFilter
- */
+
+
 public class InitSessionFilter implements Filter{
 	
 	private static Logger logger = LogManager.getLogger(InitSessionFilter.class.getName());
@@ -43,9 +42,9 @@ public class InitSessionFilter implements Filter{
 			// Inicializa la sesion
 			session = httpRequest.getSession(true);
 			
-			// Estado comun requerido
-//			Carrito c = new Carrito();
-//			SessionManager.set(httpRequest, SessionAttributeNames.CARRITO, c);
+			 //Estado comun requerido
+			Carrito c = new Carrito();
+			SessionManager.set(httpRequest, SessionAttributeNames.CARRITO, c);
 		} 
 		
 		// Continuar la invocacion de la cadena de responsabilidad.

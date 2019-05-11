@@ -3,9 +3,16 @@
 	margin: 0;
 	padding: 0;
 	font-family: sans-serif;
-	/* background-image: URL(wallpaper.jpg) no-repeat; */  
+	 
+	
 	background-size: cover;
+	
 }
+
+#body {
+	 background: rgb(177,72,189); 
+	/* background-image: URL(//wallpaper.jpg) no-repeat; */ 
+} 
 
 /* home*/
 #home {
@@ -16,24 +23,41 @@
 	display:block;
 	
 }
-#home a{
-	color: black;
+#home .preview a{
+	
+	
 }
-#home .preview {
-	width: 15%;
-	height: 300px;
-	margin: 0 3%;
+#home a {
+	color: black
+}
+.preview {
+	height: 400px;
+	margin: 0 0 0 5%;
 	display: inline;
+}
+.preview img {
+	position:relative;
+	right:5%;
+	height: 300px;
+	width:18%;
+}
+.paginacion {
+	margin-top:5%;
+}
+#home h2 {
+	margin-top:5%;
+}
+#home h3 {
+	margin-top:2%;
 }
 /* login */
 .login-form {
 	overflow: hidden;
-	padding: 40px;
-    width: 280px;
-    position: absolute;
-    top: 55%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+	    padding: 60px 40px;
+    width: 320px;
+    margin-top:5%;
+    position: relative;
+    left: 32%;
     color: white;
     background-color: rgb(200, 196, 196);
 }
@@ -63,7 +87,7 @@
     background: none;
     color: white;
     font-size: 18px;
-    width: 80%;
+    width: 90%;
     float: left;
     margin: 0 10px;
 }
@@ -88,7 +112,35 @@ label, a {
 	text-decoration-line: none;
 	color: white;
 }
-a:hover {
+.login-form a:hover {
+	color: rgb(74, 147, 216);
+	text-decoration-line: underline;
+}
+
+/* registro */
+.registro-form {
+	overflow: hidden;
+	padding: 40px;
+    width: 380px;
+    margin-top:5%;
+    position: relative;
+    left: 35%;
+    color: white;
+    background-color: rgb(200, 196, 196);
+}
+.registro-form h1 {
+    float: left;
+    font-size: 40px;
+    border-bottom: 6px solid rgb(74, 147, 216);
+    margin-bottom: 50px;
+    padding: 13px 0;
+}
+
+.registro-form a, a:visited, a:link {
+	text-decoration-line: none;
+	color: white;
+}
+.registro-form a:hover {
 	color: rgb(74, 147, 216);
 	text-decoration-line: underline;
 }
@@ -96,6 +148,7 @@ a:hover {
 /* header*/
 #header {
 	width: 95%;
+	height:76px;
 	margin: 0 3% auto;
 }
 #header a {
@@ -110,7 +163,7 @@ a:hover {
 }
 #nav ul {
     list-style: none;
-    background: rgb(50, 151, 218);
+    background: rgb(177,72,189);
 }
 .menu > li{
     position: relative;
@@ -168,7 +221,18 @@ a:hover {
 }
 #nav .boton {
 	display: inline;
+	background-color: turquoise;
+    color: white;
+    padding: 7px;
+    font-size: 16px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
 	
+}
+#nav .boton:hover, .boton:focus {
+    background-color: #2980B9;
+     transition: all .2s;
 }
 #submenu {
 	display: inline;
@@ -180,9 +244,25 @@ a:hover {
 #buscador {
 	font-size:1em;
 	box-sizing: border-box;
+	height: 30px;
 	border-radius: 20px;
 	padding-left: 10px;
 }
+.menudes-contido {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 500px;
+    overflow: auto;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+.menudes-contido select {
+    color: black;
+    text-decoration: none;
+    
+}
+.show {display: block;}
 /* footer */
 
 #footer {
@@ -190,7 +270,7 @@ a:hover {
 	height: 100px;
 	background: gray;
 	position: relative;
-	margin-bottom: 0%;
+	margin-top: 10%;
 	clear: both;
 	display: inline-block;
 }
@@ -205,6 +285,22 @@ a:hover {
 	font-family:
 }
 
+#detalle #titulo {
+	width:60%;
+	margin:0%;
+}
+#detalle #info {
+	width: 30%;
+    margin-top: -60%;
+    position: relative;
+    left: 60%;
+}
+#detalle #info p {
+	padding:5%;
+}
+#detalle #info .addcarrito {
+	margin-top:15%;
+}
 /*carrito*/
 #carrito {
 	width: 70%;
@@ -213,6 +309,7 @@ a:hover {
 #carrito a {
 	color: red;
 }
+
 
 
 /*resultados busqueda*/

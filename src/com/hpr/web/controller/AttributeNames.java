@@ -5,6 +5,7 @@ public interface AttributeNames {
 	public static final String DUPLICATED_USER = "error.usuario_duplicado";
 	public static final String USUARIOS = "usuarios";
 	public static final String RESULTADOS = "resultados";
+	public static final String RESULTADOS_TOTAL = "resultados_total";
 	public static final String RESULTADOS_VENTAS = "resultados_ventas";
 	public static final String RESULTADOS_REBAJAS = "resultados_rebajas";
 	public static final String RESULTADOS_NOVEDADES = "resultados_novedades";
@@ -17,6 +18,7 @@ public interface AttributeNames {
 	public static final String CATEGORIAS = "categorias";
 	public static final String TIPOS = "tipos";
 	public static final String PAISES = "paises";
+	public static final String FAVORITOS = "favoritos";
 	
 	
 

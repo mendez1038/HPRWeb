@@ -10,15 +10,14 @@
 		%>
 	<div id="titulo">
 	<h1><%=contenido.getTitulo()%></h1>
-	<img src="<%=contenido.getPortada()%>" width="500px">
+	<img src="<%=contenido.getPortada()%>" width="500px" height="600px">
 	</div>
 	<div id="info">
 	<p><fmt:message key = "fechalanzamiento" bundle="${traducciones}"/>: <%=contenido.getFechaLanzamiento()%></p>
 	<p><fmt:message key = "restriccionedad" bundle="${traducciones}"/>: <%=contenido.getRestriccionEdad()%></p>
 	<p><fmt:message key = "descripcion" bundle="${traducciones}"/>: <%=contenido.getDescripcionBreve()%></p>
-	<p><fmt:message key = "precio" bundle="${traducciones}"/>: <%=contenido.getPrecio()%> $</p>
-	<p><%=contenido.getPorcentaje()%>%</p>
-	<p> - <%=contenido.getPrecioDescontado()%>$</p>
+	<p><%=contenido.getPorcentaje()%>%<fmt:message key = "precio" bundle="${traducciones}"/>: <%=contenido.getPrecio()%> $
+	 - <%=contenido.getPrecioDescontado()%>$</p>
 	<p> <fmt:message key = "duracion" bundle="${traducciones}"/>: <%=contenido.getDuracion()%></p>
 	<p> <fmt:message key = "reparto" bundle="${traducciones}"/>: </p>
 	<div class="addCarrito">

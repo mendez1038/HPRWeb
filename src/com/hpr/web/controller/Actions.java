@@ -12,5 +12,7 @@ public interface Actions {
 	public static final String PREEDICION = "preedicion";
 	public static final String ANADIR = "anadir";
 	public static final String ELIMINAR = "eliminar";
+	public static final String ANADIR_FAVORITO = "anadir_favorito";
+	public static final String ELIMINAR_FAVORITO = "eliminar_favorito";
 	
 }

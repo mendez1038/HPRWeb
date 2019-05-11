@@ -12,5 +12,6 @@
 		|<a href="<%=ControllerPaths.USUARIO%>?<%=ParameterNames.ACTION%>=<%=Actions.CAMBIAR_IDIOMA%>&amp;<%=ParameterNames.LOCALE%>=<%=ParameterNames.EN%>">EN</a>]
 		
 	</div>
+	</div>
 	</body>
 </html>

@@ -18,7 +18,13 @@
 <link rel="icon" href="<%=request.getContextPath()%>/imgs/logo.ico">
 <link rel="stylesheet" type="text/css" media="screen"
 	href="<%=request.getContextPath()%>/css/main.css">
+<script >
+function desplegarMenu() {
+    document.getElementById("menudes").classList.toggle("show");
+}
 
+
+</script>
 </head>
 <%
 	Errors errors = (Errors) request.getAttribute(AttributeNames.ERRORS);
@@ -31,6 +37,7 @@
 	
 %>
 <body>
+<div id="body">
 
 	<div id="header">
 		
@@ -42,7 +49,7 @@
 			<ul class="menu">
 				<li><a href="<%=request.getContextPath()%>"><fmt:message key = "inicio" bundle="${traducciones}"/></a></li>
 				<li><a href="#"><fmt:message key = "lista" bundle="${traducciones}"/></a></li>
-				<li><a href="#"><fmt:message key = "favoritos" bundle="${traducciones}"/></a></li>
+				<li><a href="<%=request.getContextPath()+ViewPaths.FAVORITOS%>"><fmt:message key = "favoritos" bundle="${traducciones}"/></a></li>
 				<li><a href="<%=request.getContextPath()+ViewPaths.CARRITO%>"><fmt:message key = "carrito" bundle="${traducciones}"/></a></li>
 				<li>
 					<form action="<%=ControllerPaths.CONTENIDO%>" method="post">
@@ -50,7 +57,8 @@
 						<input id="buscador" type="text" name="<%=ParameterNames.TITULO%>" value="<%=ParameterUtils.getParameter(request, ParameterNames.TITULO)%>"placeholder="<fmt:message key = "busqueda" bundle="${traducciones}"/>" />
 						<input class="boton" type="submit" value="<fmt:message key = "buscar" bundle="${traducciones}"/>">
 						<input type="hidden" name="<%=ParameterNames.ACTION%>" value="<%=Actions.BUSCAR%>" /> 
-						  <label><fmt:message key = "categoria" bundle="${traducciones}"/></label>
+						<div id="menudes" class="menudes-contido">
+						<label><fmt:message key = "categoria" bundle="${traducciones}"/></label>
 						 <select name="<%=ParameterNames.CATEGORIA%>">
 						<option selected value="null"></option> 
 						<%for(Categoria c: categorias){ %>								 
@@ -66,36 +74,37 @@
 							<option value="16+">16+</option> 
 							<option value="18+">18+</option> 
 						</select>
-						<label><fmt:message key = "tipocontenido" bundle="${traducciones}"/></label>
+						 <label><fmt:message key = "tipocontenido" bundle="${traducciones}"/></label>
 						<select name="<%=ParameterNames.TIPO_CONTENIDO%>">
-						<option value="null"></option> 
+						<option value=""></option> 
 						<%for(TipoContenido tc: tipos){ %>
 							<option value="<%=tc.getIdTipoContenido()%>"><%=tc.getNombreContenido() %></option>	
 						<%} %>  
-						</select>
-						<label><fmt:message key = "pais" bundle="${traducciones}"/></label>
+						</select> 
+						 <label><fmt:message key = "pais" bundle="${traducciones}"/></label>
 						<select name="<%=ParameterNames.PAIS%>">
 						<option value="null"></option> 
 						<%for(Pais pais: paises){ %>
 							<option value="<%=pais.getIdPais()%>"><%=pais.getNombrePais() %></option>	
 						<%} %>  
-						</select>
-						<label><fmt:message key = "descuento" bundle="${traducciones}"/></label>
-						<select name="<%=ParameterNames.DESCUENTO%>" required>
-							<option value="null"></option> 
+						</select> 
+						<%-- <label><fmt:message key = "descuento" bundle="${traducciones}"/></label>
+						<select name="<%=ParameterNames.DESCUENTO%>" >
+							<option value=""></option> 
 							<option value="5">5%</option> 
 							<option value="10">10%</option> 
 							<option value="15">15%</option> 
 							<option value="25">25%</option> 
 							<option value="30">30%</option> 
 							<option value="50">50%</option> 
-						</select>
+						</select> --%>
 						<input id="buscador2" type="text" name="<%=ParameterNames.ARTISTA%>" value="<%=ParameterUtils.getParameter(request, ParameterNames.ARTISTA)%>"placeholder="<fmt:message key = "busqueda2" bundle="${traducciones}"/>" />
-						
+						</div>
 					</form>
 				</li>
+				
 				<li>
-					<button class="boton"><fmt:message key = "filtros" bundle="${traducciones}"/></button>
+					<button class="boton" onclick="desplegarMenu()"><fmt:message key = "filtros" bundle="${traducciones}"/></button>
 				</li>
 
 		<c:choose>
@@ -123,7 +132,8 @@
 		</c:otherwise>
 		</c:choose>
 			</ul>
-
+			
 		</div>
-
+		
 	</div>
+	

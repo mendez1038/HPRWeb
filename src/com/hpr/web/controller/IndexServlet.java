@@ -28,12 +28,15 @@ public class IndexServlet extends HttpServlet {
        
 	private static int pageSize = Integer.valueOf(
 			ConfigurationManager.getInstance().getParameter(
-						ConfigurationParameterNames.RESULTS_PAGE_SIZE_DEFAULT))+2; 
+						ConfigurationParameterNames.RESULTS_PAGE_SIZE_DEFAULT))+1; 
 	private static int pagingPageCount = Integer.valueOf(
 			ConfigurationManager.getInstance().getParameter(
 						ConfigurationParameterNames.RESULTS_PAGING_PAGE_COUNT)); 
-	private ContenidoService servicio = null;
+	
 	private static Logger logger = LogManager.getLogger(ContenidoServlet.class);
+	
+	private ContenidoService servicio = null;
+	
     public IndexServlet() {
         super();
         servicio = new ContenidoServiceImpl();

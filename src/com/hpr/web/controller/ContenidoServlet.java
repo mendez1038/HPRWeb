@@ -1,8 +1,7 @@
 package com.hpr.web.controller;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,41 +15,42 @@ import org.apache.logging.log4j.Logger;
 
 import com.david.training.exceptions.DataException;
 import com.david.training.model.Artista;
-import com.david.training.model.Categoria;
 import com.david.training.model.Contenido;
-import com.david.training.model.Pais;
+
 import com.david.training.model.ProductoCriteria;
-import com.david.training.service.CategoriaService;
 import com.david.training.service.ContenidoService;
 import com.david.training.service.Results;
-import com.david.training.service.TipoContenidoService;
-import com.david.training.service.impl.CategoriaServiceImpl;
 import com.david.training.service.impl.ContenidoServiceImpl;
-import com.david.training.service.impl.TipoContenidoServiceImpl;
+import com.hpr.web.config.ConfigurationManager;
+import com.hpr.web.config.ConfigurationParameterNames;
 import com.hpr.web.model.ErrorCodes;
 import com.hpr.web.model.Errors;
+import com.hpr.web.util.ArrayUtils;
 import com.hpr.web.util.SessionManager;
 import com.hpr.web.util.WebConstants;
+import com.hpr.web.util.WebUtils;
 
 @WebServlet("/contenido")
 public class ContenidoServlet extends HttpServlet {
+	private static final long serialVersionUID = 1L;
 	
-
+	
+	private static int pageSize = Integer.valueOf(
+			ConfigurationManager.getInstance().getParameter(
+						ConfigurationParameterNames.RESULTS_PAGE_SIZE_DEFAULT))+1; 
+	private static int pagingPageCount = Integer.valueOf(
+			ConfigurationManager.getInstance().getParameter(
+						ConfigurationParameterNames.RESULTS_PAGING_PAGE_COUNT)); 
+	
 	private static Logger logger = LogManager.getLogger(ContenidoServlet.class.getName());
 	
-	private ContenidoService servicio = null;
-	private CategoriaService servicioCategoria = null;
-//	private PaisService servicioPais = null;
-	private TipoContenidoService servicioTipo = null;
 	
+	private ContenidoService servicio = null;
 
 
 	public ContenidoServlet() {
 		super();
 		servicio = new ContenidoServiceImpl();
-		servicioCategoria = new CategoriaServiceImpl();
-//		servicioPais = new PaisServiceImpl();
-		servicioTipo = new TipoContenidoServiceImpl();
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) 
@@ -67,32 +67,41 @@ public class ContenidoServlet extends HttpServlet {
 		boolean redirect = false;
 		boolean hasErrors = false;
 		String idioma=SessionManager.get(request,WebConstants.USER_LOCALE).toString().substring(0,2).toUpperCase();
-
+		
+		
 		if (Actions.BUSCAR.equalsIgnoreCase(action)) {
 			
-			StringBuilder targetString = new StringBuilder();			
+			try {		
 			String texto = request.getParameter(ParameterNames.TITULO);
 			String[] generos = request.getParameterValues(ParameterNames.CATEGORIA);
 			String rEdad = request.getParameter(ParameterNames.RESTRICCION_EDAD);
-
-			String tipoContenido = request.getParameter(ParameterNames.TIPO_CONTENIDO);			
-//			Integer descuento = Integer.valueOf(request.getParameter(ParameterNames.DESCUENTO));
+			String tipoContenido = request.getParameter(ParameterNames.TIPO_CONTENIDO);	
+//			Integer descuento = null;
+//			if(request.getParameter(ParameterNames.DESCUENTO) !="") {
+//			descuento = Integer.valueOf(request.getParameter(ParameterNames.DESCUENTO));
+//			}
 			String nombreArtista = request.getParameter(ParameterNames.ARTISTA);
 //			String precio = request.getParameter(ParameterNames.PRECIO);
 //			String ano = request.getParameter(ParameterNames.ANO);
-			//String[] pais = request.getParameterValues(ParameterNames.PAIS);
+			String[] pais = request.getParameterValues(ParameterNames.PAIS);
 //			String duracion = request.getParameter(ParameterNames.DURACION);
-
-			Results<Contenido> resultados = null;
-			ProductoCriteria pc = new ProductoCriteria();
-			Artista a = new Artista();
-//			List<Categoria> categorias = new ArrayList<Categoria>();
-//			
-//			List<Pais> paises = new ArrayList();
 			
-			int startIndex = 1; 
-			int pageSize = 5;
-			try {
+			if (hasErrors) {
+				
+				target = ViewPaths.INDEX;
+			} else {
+			
+			int page = WebUtils.
+					getPageNumber(request.getParameter(ParameterNames.PAGE), 1);
+			
+			StringBuilder targetString = new StringBuilder();
+			ProductoCriteria pc = null;
+			Artista a = null;
+
+			
+				 pc = new ProductoCriteria();
+				 a = new Artista();
+				
 				if(texto!=null && texto!="") {
 				pc.setTitulo(texto);
 				targetString.append("&"+ParameterNames.TITULO+"="+pc.getTitulo());
@@ -110,51 +119,49 @@ public class ContenidoServlet extends HttpServlet {
 //				targetString.append("&"+ParameterNames.DESCUENTO+"="+pc.getPorcentaje());
 //				}
 			
-				if(nombreArtista!=null && nombreArtista!="") {
+				if(nombreArtista!=null) {
  				a.setNombreArtista(nombreArtista);
-				pc.setA(a);;
+				pc.setA(a);
 				targetString.append("&"+ParameterNames.ARTISTA+"="+a.getNombreArtista());
 				}
-			
-			if (hasErrors) {
+				if(pais!=null) {
+					pc.setPais(ArrayUtils.arrayToPais(pais));
+					targetString.append("&"+ParameterNames.PAIS+"="+pc.getPais());
+					}
+				if(generos!=null) {
+					pc.setCategoria(ArrayUtils.arrayToCategoria(generos));
+					targetString.append("&"+ParameterNames.CATEGORIA+"="+pc.getCategoria());
+					}
 				
-				target = ViewPaths.INDEX;
-			} else {
-				
-				resultados = servicio.busquedaEstructurada(pc, idioma, startIndex, pageSize);
+				Results<Contenido> resultados = servicio.busquedaEstructurada(pc, idioma, (page-1)*pageSize+1, pageSize);
 					
-					if ( resultados!=null) {
+					
 						
 						request.setAttribute(AttributeNames.RESULTADOS, resultados.getPage());
-					}
-					else {
-						request.setAttribute(AttributeNames.ERRORS, "No hay resultados");
-					}
-			}
-				} catch (DataException e) {
-					logger.warn("Buscando... "+texto, e);
+						request.setAttribute(AttributeNames.RESULTADOS_TOTAL, resultados.getTotal());
+						
+						int totalPages = (int) Math.ceil(resultados.getTotal()/(double)pageSize);
+						int firstPagedPage = Math.max(1, page-pagingPageCount);
+						int lastPagedPage = Math.min(totalPages, page+pagingPageCount);
+						request.setAttribute(ParameterNames.PAGE, page);
+						request.setAttribute(AttributeNames.TOTAL_PAGES, totalPages);
+						request.setAttribute(AttributeNames.FIRST_PAGED_PAGES, firstPagedPage);
+						request.setAttribute(AttributeNames.LAST_PAGED_PAGES, lastPagedPage);
+						request.setAttribute(ParameterNames.URL, targetString.toString());
+						target = ViewPaths.BUSQUEDA;
+						logger.info(pc);
+			}	
+			} catch (DataException e) {
+					logger.warn("Buscando... "+ e);
 					errors.add(ParameterNames.ACTION,ErrorCodes.SEARCH_ERROR);	
 				}
 
-
-				if (errors.hasErrors()) {	
-					if (logger.isDebugEnabled()) {
-						logger.debug("Busqueda fallida: {}", errors);
-					}				
-					request.setAttribute(AttributeNames.ERRORS, errors);				
-					target = ViewPaths.INDEX;				
-				} else {			
-					if (logger.isDebugEnabled()) {
-						logger.info("Busqueda completada para: "+pc);
-					}				
+			}
 					
-					SessionManager.set(request, SessionAttributeNames.URL, targetString.toString());
-					target = ViewPaths.BUSQUEDA;
-					
-				}
+		{		
 			
 			//vista detalle
-		} else if(Actions.BUSCAR_ID.equalsIgnoreCase(action)) {
+		}  if(Actions.BUSCAR_ID.equalsIgnoreCase(action)) {
 		
 			
 			Integer idContendio = Integer.valueOf(request.getParameter(ParameterNames.ID));
