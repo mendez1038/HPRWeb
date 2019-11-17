@@ -34,9 +34,6 @@ import com.hpr.web.util.ValidationUtils;
 import com.hpr.web.util.WebConstants;
 import com.mysql.cj.util.StringUtils;
 
-
-
-
 @WebServlet("/usuarios")
 public class UsuarioServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -145,12 +142,12 @@ public class UsuarioServlet extends HttpServlet {
 			if(apellidos == null) {
 				errors.add(ParameterNames.APELLIDOS, ErrorCodes.OPTIONAL_PARAMETER);
 			}
-			
+
 			telefono = ValidationUtils.stringOnlyNumbersValidator(telefono, false);
 			if(telefono == null) {
 				errors.add(ParameterNames.TELEFONO, ErrorCodes.OPTIONAL_PARAMETER);
 			}
-		
+
 			Usuario u = new Usuario();
 			if (!errors.hasErrors()) {
 				u.setEmail(email);
@@ -161,38 +158,38 @@ public class UsuarioServlet extends HttpServlet {
 				u.setFechaNacimiento(fNacimiento);
 				u.setTelefono(telefono);
 			}
-			
+
 			try {	
-				 servicio.signUp(u);
-			
-			if (errors.hasErrors()) {	
-				if (logger.isDebugEnabled()) {
-					logger.debug("Registro fallido: {}", errors);
-				}				
-				request.setAttribute(AttributeNames.ERRORS, errors);				
-				target = ViewPaths.REGISTRO;				
-			} else {			
-				if (logger.isDebugEnabled()) {
-					logger.info("Usuario {} registrado.", u.getEmail());
-				}				
-				SessionManager.set(request, SessionAttributeNames.USER, u);						
-				target = request.getContextPath() + ViewPaths.INDEX;
-				redirect = true;					
-			}
-			
-				
-					
-				} catch (MailException e) {
-					errors.add(Actions.REGISTRO, ErrorCodes.MAIL_ERROR);
-				} catch (DataException e) {
-					errors.add(Actions.REGISTRO, ErrorCodes.SIGNUP_ERROR);
+				servicio.signUp(u);
+
+				if (errors.hasErrors()) {	
+					if (logger.isDebugEnabled()) {
+						logger.debug("Registro fallido: {}", errors);
+					}				
+					request.setAttribute(AttributeNames.ERRORS, errors);				
+					target = ViewPaths.REGISTRO;				
+				} else {			
+					if (logger.isDebugEnabled()) {
+						logger.info("Usuario {} registrado.", u.getEmail());
+					}				
+					SessionManager.set(request, SessionAttributeNames.USER, u);						
+					target = request.getContextPath() + ViewPaths.INDEX;
+					redirect = true;					
 				}
+
+
+
+			} catch (MailException e) {
+				errors.add(Actions.REGISTRO, ErrorCodes.MAIL_ERROR);
+			} catch (DataException e) {
+				errors.add(Actions.REGISTRO, ErrorCodes.SIGNUP_ERROR);
+			}
 
 		}else if(Actions.PREEDICION.equalsIgnoreCase(action)) {
 			Usuario user=(Usuario) SessionManager.get(request, SessionAttributeNames.USER);
 			request.setAttribute(AttributeNames.USUARIOS, user);
 			target = ViewPaths.PERFIL;
-		
+
 		}else if(Actions.EDICION.equalsIgnoreCase(action)) {
 			Usuario user=(Usuario) SessionManager.get(request, SessionAttributeNames.USER);
 			String contrasena=request.getParameter(ParameterNames.CONTRASENA);
@@ -200,7 +197,7 @@ public class UsuarioServlet extends HttpServlet {
 			String apellidos=request.getParameter(ParameterNames.APELLIDOS);
 			String genero=request.getParameter(ParameterNames.GENERO);
 			String telefono=request.getParameter(ParameterNames.TELEFONO);	
-			
+
 			contrasena = ValidationUtils.passwordValidator(contrasena);
 			if(contrasena == null) {
 				errors.add(ParameterNames.CONTRASENA, ErrorCodes.OPTIONAL_PARAMETER);
@@ -229,7 +226,7 @@ public class UsuarioServlet extends HttpServlet {
 			update.setGenero(genero);
 			update.setTelefono(telefono);
 			update.setEmail(user.getEmail());
-			
+
 			try {
 				servicio.update(update);
 			} catch (InstanceNotFoundException e) {
@@ -260,11 +257,11 @@ public class UsuarioServlet extends HttpServlet {
 			}
 			target=request.getHeader(ViewPaths.REFERER);
 			redirect=true;
-			
+
 		}else {
 			logger.error("Action desconocida");
 			target = request.getContextPath() + ViewPaths.INDEX;
-			
+
 		}
 		if (redirect) {
 			logger.info("Redirecting to "+target);

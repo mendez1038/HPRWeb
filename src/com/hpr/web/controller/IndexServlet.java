@@ -25,36 +25,38 @@ import com.hpr.web.util.WebUtils;
 @WebServlet("/index")
 public class IndexServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+
 	private static int pageSize = Integer.valueOf(
 			ConfigurationManager.getInstance().getParameter(
-						ConfigurationParameterNames.RESULTS_PAGE_SIZE_DEFAULT))+1; 
+					ConfigurationParameterNames.RESULTS_PAGE_SIZE_DEFAULT))+1; 
 	private static int pagingPageCount = Integer.valueOf(
 			ConfigurationManager.getInstance().getParameter(
-						ConfigurationParameterNames.RESULTS_PAGING_PAGE_COUNT)); 
-	
+					ConfigurationParameterNames.RESULTS_PAGING_PAGE_COUNT)); 
+
 	private static Logger logger = LogManager.getLogger(ContenidoServlet.class);
-	
+
 	private ContenidoService servicio = null;
-	
-    public IndexServlet() {
-        super();
-        servicio = new ContenidoServiceImpl();
-    }
+
+	public IndexServlet() {
+		super();
+		servicio = new ContenidoServiceImpl();
+	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String target = null;
 		String idiomaPagina=SessionManager.get(request,WebConstants.USER_LOCALE).toString().substring(0,2).toUpperCase();
 		int page = WebUtils.
 				getPageNumber(request.getParameter(ParameterNames.PAGE), 1);
-		
+
 		Results<Contenido> novedades;
+		
 		try {
 
+			
 			novedades = servicio.findAllByDate(idiomaPagina, (page-1)*pageSize+1, pageSize);
 			request.setAttribute(AttributeNames.RESULTADOS_NOVEDADES, novedades.getPage());
 			request.setAttribute(AttributeNames.TOTAL, novedades.getTotal());
-			
+
 			int totalPages = (int) Math.ceil(novedades.getTotal()/(double)pageSize);
 			int firstPagedPage = Math.max(1, page-pagingPageCount);
 			int lastPagedPage = Math.min(totalPages, page+pagingPageCount);
@@ -62,6 +64,11 @@ public class IndexServlet extends HttpServlet {
 			request.setAttribute(AttributeNames.TOTAL_PAGES, totalPages);
 			request.setAttribute(AttributeNames.FIRST_PAGED_PAGES, firstPagedPage);
 			request.setAttribute(AttributeNames.LAST_PAGED_PAGES, lastPagedPage);
+		
+			
+	
+			
+		
 		} catch (DataException e) {
 			logger.debug(e);
 		}
@@ -69,7 +76,7 @@ public class IndexServlet extends HttpServlet {
 		request.getRequestDispatcher(target).forward(request, response);
 	}
 
-	
+
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doGet(request, response);
 	}

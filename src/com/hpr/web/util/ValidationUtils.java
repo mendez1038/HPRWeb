@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -12,17 +13,32 @@ import org.apache.logging.log4j.Logger;
 import com.mysql.cj.util.StringUtils;
 
 public class ValidationUtils {
-	private static Logger logger = LogManager.getLogger(ValidationUtils.class);
+	private static Logger logger = LogManager.getLogger(ValidationUtils.class.getName());
 
+	public static final String getParameter(HttpServletRequest request, String name) {		
+		String value = (String) request.getParameter(name);							
+		if (value==null) {
+			value = "";
+		}else {
+			value = value.trim();
+		}
+		return value;
+	}
+	
 	public static Integer intValidator(String parameter) {
-		try {
 			if(!StringUtils.isEmptyOrWhitespaceOnly(parameter)) {
-				return Integer.parseInt(ParameterUtils.trimmer(parameter));
+				return Integer.parseInt(parameter.trim());
 			}else {
 				return null;
 			}
-		}catch (NumberFormatException ex) {
-			logger.warn(ex.getMessage(), ex);
+	}
+	
+	public static final String isEmpty(String s) {
+		
+		if(!StringUtils.isEmptyOrWhitespaceOnly(s)) {
+			s=s.trim();
+			return s;
+		}else {
 			return null;
 		}
 	}
@@ -56,7 +72,7 @@ public class ValidationUtils {
 	public static String passwordValidator (String psswd) {
 
 		psswd = ParameterUtils.trimmer(psswd);
-		
+
 
 		if(StringUtils.isEmptyOrWhitespaceOnly(psswd)) {
 			return null;
@@ -81,10 +97,10 @@ public class ValidationUtils {
 			return null;
 		}
 	}
-	
+
 	public static String apellidosValidator (String parameter, boolean isName){
 
-		
+
 		if(!isName) {
 			if(!stringOnlyLetters(parameter)) {
 				parameter = null;
@@ -101,7 +117,7 @@ public class ValidationUtils {
 	public static String stringOnlyLettersValidator (String parameter, boolean isName){
 
 		parameter = ParameterUtils.trimmer(parameter);
-		
+
 		if(!isName) {
 			if(!stringOnlyLetters(parameter)) {
 				parameter = null;
@@ -114,11 +130,11 @@ public class ValidationUtils {
 		return parameter;
 
 	}
-	
+
 	public static String stringOnlyNumbersValidator (String parameter, boolean isName){
 
 		parameter = ParameterUtils.trimmer(parameter);
-		
+
 		if(!isName) {
 			if(!stringOnlyNumbers(parameter)) {
 				parameter = null;
@@ -131,8 +147,8 @@ public class ValidationUtils {
 		return parameter;
 
 	}
-	
-	
+
+
 
 	private static boolean emailIsValid (String email) {
 
@@ -166,7 +182,7 @@ public class ValidationUtils {
 		Matcher m = p.matcher(arg);
 		return m.matches();
 	}
-	
+
 	private static boolean stringOnlyNumbers (String arg) {
 
 		String argPattern = "[0-9]+";

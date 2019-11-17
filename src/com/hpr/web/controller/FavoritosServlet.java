@@ -23,13 +23,13 @@ import com.hpr.web.util.SessionManager;
 @WebServlet("/favoritos")
 public class FavoritosServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-   private FavoritoService servicio = null;
-   private static Logger logger = LogManager.getLogger(FavoritosServlet.class.getName());
-    public FavoritosServlet() {
-        super();
-        servicio = new FavoritoServiceImpl();
-    }
+
+	private FavoritoService servicio = null;
+	private static Logger logger = LogManager.getLogger(FavoritosServlet.class.getName());
+	public FavoritosServlet() {
+		super();
+		servicio = new FavoritoServiceImpl();
+	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException {
@@ -38,46 +38,46 @@ public class FavoritosServlet extends HttpServlet {
 		Favorito favorito = null;
 		Integer idContenido = Integer.valueOf(request.getParameter(ParameterNames.ID));
 		Usuario u = (Usuario) SessionManager.get(request, SessionAttributeNames.USER);
-		
+
 		if (logger.isDebugEnabled()) {
 			logger.debug("Action {}: {}", action, ToStringBuilder.reflectionToString(request.getParameterMap()));
 		}
-		
+
 		if(Actions.ANADIR_FAVORITO.equalsIgnoreCase(action)) {
 			String email = u.getEmail();
 			favorito.setEmail(email);
 			favorito.setIdContenido(idContenido);
-			
+
 			try {
 				servicio.añadirFavorito(favorito);
 			} catch (DataException e) {
-				
+
 				e.printStackTrace();
 			}
-			
-			
-		
-	}else if(Actions.ELIMINAR_FAVORITO.equalsIgnoreCase(action)) {
+
+
+
+		}else if(Actions.ELIMINAR_FAVORITO.equalsIgnoreCase(action)) {
 			String email = u.getEmail();
 			favorito.setEmail(email);
 			favorito.setIdContenido(idContenido);
-			
+
 			try {
 				servicio.upadteEliminarFavorito(favorito);
 			} catch (DataException e) {
-				
+
 				e.printStackTrace();
 			}
-		
-	}	
-	response.sendRedirect(target);
-}
+
+		}	
+		response.sendRedirect(target);
+	}
 
 
 
-	
+
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+
 		doGet(request, response);
 	}
 

@@ -14,12 +14,12 @@ import com.david.training.model.Contenido;
 
 
 public class Carrito {
-	
+
 	private static Logger logger = LogManager.getLogger(Carrito.class.getName());
-	
+
 	private List<LineaCarrito> lineas = null;
 	private double total;
-	
+
 	public Carrito() {
 		lineas= new ArrayList<LineaCarrito>();
 	}
@@ -39,15 +39,15 @@ public class Carrito {
 	public void setTotal(double total) {
 		this.total = total;
 	}
-	
+
 	public void anadir(LineaCarrito lp) {
 		lineas.add(lp);
 	}
-	
+
 	public int numeroLineas() {
 		return lineas.size();
 	}
-	
+
 	public void deleteLineaCarrito(Integer idContenido) {
 		try {
 			for (int i=0;i<lineas.size();i++) {
@@ -56,15 +56,15 @@ public class Carrito {
 				}
 			}
 			calculateOrderTotal();	   
-			   
+
 		} catch(NumberFormatException e) {
-			  
+
 			logger.error("Error al eliminar del carrito: "+ e.getMessage());	   
 		}
 	}
-	
+
 	public boolean addLineaCarrito(Contenido c) {
-		
+
 		LineaCarrito lineaCarrito = new LineaCarrito();
 		boolean checkDuplicate = false;
 		try {
@@ -83,7 +83,7 @@ public class Carrito {
 		}
 		return checkDuplicate;
 	}
-	
+
 	public void addLineaCarrito(LineaCarrito lc) {
 		lineas.add(lc);
 	}
@@ -95,20 +95,20 @@ public class Carrito {
 		}
 		return lineaCarrito;
 	}
-	
+
 	protected void calculateOrderTotal() {
-		  double totalCarrito = 0;
-		  for(int contador=0;contador<lineas.size(); contador++) {
-			  LineaCarrito linea = (LineaCarrito) lineas.get(contador);
-			  totalCarrito+=linea.getPrecio()-linea.getPrecioDescontado();
-		    
-		  }
-		  setTotal(totalCarrito);
-	 }
+		double totalCarrito = 0;
+		for(int contador=0;contador<lineas.size(); contador++) {
+			LineaCarrito linea = (LineaCarrito) lineas.get(contador);
+			totalCarrito+=linea.getPrecio()-linea.getPrecioDescontado();
+
+		}
+		setTotal(totalCarrito);
+	}
 
 	protected boolean checkDuplicated(Contenido c) {
 		boolean repetido=false;
-		
+
 		for (int i=0;i<lineas.size();i++) {
 			if (lineas.get(i).getContenido().getIdContenido()==c.getIdContenido()) {
 				repetido=true;
@@ -116,7 +116,7 @@ public class Carrito {
 				repetido=false;
 			}
 		}
-		
+
 		return repetido;
 	}
 }

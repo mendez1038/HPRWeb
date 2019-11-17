@@ -30,11 +30,11 @@ import com.hpr.web.util.WebConstants;
 public class LocaleFilter implements Filter {
 
 	private static Logger logger = LogManager.getLogger(LocaleFilter.class.getName());
-  	
 
-	
-    public LocaleFilter() {       
-    }
+
+
+	public LocaleFilter() {       
+	}
 
 	public void init(FilterConfig cfg) throws ServletException {
 		// Habitualmente la configuracion de los parametros
@@ -44,26 +44,26 @@ public class LocaleFilter implements Filter {
 
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) 
 			throws IOException, ServletException {
-		
+
 		HttpServletRequest httpRequest = ((HttpServletRequest) request);
 		HttpServletResponse httpResponse = ((HttpServletResponse) response);
-		
+
 		Locale locale = (Locale) SessionManager.get(httpRequest, WebConstants.USER_LOCALE);
-		
+
 		if (locale == null) {
 			// No hay Locale configurado para esta sesion.
-			
+
 			// Primero intentamos inicializar el locale de cookie.
 			Cookie cookieLocale = CookieManager.getCookie(httpRequest, WebConstants.USER_LOCALE);
 			if (cookieLocale!=null) {
-				
+
 				// El valor "es_ES", "en_GB", etc. provoca una inicializacion 
 				// erronea en new Locale(String l). new Locale("es_ES").toString() genera es_es
-				
+
 				// Por ello, al igual que cuando viene en el header http, o cuando viene de 
 				// un parametro de la request, tambien cuando viene de una cookie hay que
 				// pasarlo por:
-				
+
 				locale = new Locale(cookieLocale.getValue());
 				if (locale!=null && logger.isDebugEnabled()) {
 					logger.debug("Locale initialized from cookie: "+cookieLocale.getValue());
@@ -86,22 +86,22 @@ public class LocaleFilter implements Filter {
 			SessionManager.set(httpRequest, WebConstants.USER_LOCALE, locale);			
 			CookieManager.addCookie(httpResponse, WebConstants.USER_LOCALE, locale.toString(), "/", 365*24*60*60);
 		}
-		
+
 		// Continuar la invocacion de la cadena de responsabilidad.
 		// Solamente no se invocaría si el filtro determinase otro 
 		// como por ejemplo en el caso de un filtro de autenticación.
 		chain.doFilter(request, response);		
-	
+
 	}
 
 
 	protected Locale getLocale(HttpServletRequest httpRequest) {			
 		String acceptLanguageHeader = httpRequest.getHeader("Accept-Language");
-		
+
 		// Miramos cuales de los lenguajes establecidos por el usuario en su navegador
 		// son soportados por nuesetra web
 		List<Locale> matchedLocales = LocaleManager.getMatchedLocales(acceptLanguageHeader);
-		
+
 		Locale locale = null;
 		if (matchedLocales.size()>0) {
 			locale = matchedLocales.get(0);
@@ -118,7 +118,7 @@ public class LocaleFilter implements Filter {
 	@Override
 	public void destroy() {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
+
 }

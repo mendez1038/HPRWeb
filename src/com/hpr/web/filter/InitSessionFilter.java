@@ -21,45 +21,41 @@ import com.hpr.web.util.SessionManager;
 
 
 public class InitSessionFilter implements Filter{
-	
+
 	private static Logger logger = LogManager.getLogger(InitSessionFilter.class.getName());
-	  
-    public InitSessionFilter() {       
-    }
+
+	public InitSessionFilter() {       
+	}
 
 	public void init(FilterConfig cfg) throws ServletException {
 	}
 
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-		
+
 		HttpServletRequest httpRequest = ((HttpServletRequest) request);
 		HttpSession session = httpRequest.getSession(false);
-		
+
 		if (session==null) {
 			if (logger.isInfoEnabled()) {
 				logger.info("Request from "+request.getRemoteAddr()+": Initializing session...");
 			}
 			// Inicializa la sesion
 			session = httpRequest.getSession(true);
-			
-			 //Estado comun requerido
+
+			//Estado comun requerido
 			Carrito c = new Carrito();
 			SessionManager.set(httpRequest, SessionAttributeNames.CARRITO, c);
 		} 
-		
+
 		// Continuar la invocacion de la cadena de responsabilidad.
-		// Solamente no se invocaría si el filtro determinase otro 
-		// como por ejemplo en el caso de un filtro de autenticación.
+		// Solamente no se invocara si el filtro determinase otro 
+		// como por ejemplo en el caso de un filtro de autenticacion.
 		chain.doFilter(request, response);
 	}
 
 	@Override
 	public void destroy() {
 		// TODO Auto-generated method stub
-		
+
 	}
-
-
-
-
 }

@@ -22,29 +22,29 @@ import com.hpr.web.util.WebConstants;
 @WebServlet("/carrito")
 public class CarritoServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+
 	private ContenidoService servicio = null;
-    public CarritoServlet() {
-        super();
-       servicio = new ContenidoServiceImpl();
-        }
-   
+	public CarritoServlet() {
+		super();
+		servicio = new ContenidoServiceImpl();
+	}
+
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String action= request.getParameter(ParameterNames.ACTION);
 		String target = request.getHeader(ViewPaths.REFERER);
 		Integer idContenido = Integer.valueOf(request.getParameter(ParameterNames.ID));
-		
-		
+
+
 		if(Actions.ANADIR.equalsIgnoreCase(action)) {
-				try {
-					addToCart(request, idContenido);
-				} catch (InstanceNotFoundException e) {
-					e.printStackTrace();
-				} catch (DataException e) {
-					
-					e.printStackTrace();
-				}
-			
+			try {
+				addToCart(request, idContenido);
+			} catch (InstanceNotFoundException e) {
+				e.printStackTrace();
+			} catch (DataException e) {
+
+				e.printStackTrace();
+			}
+
 		}else if(Actions.ELIMINAR.equalsIgnoreCase(action)) {
 			deleteCart(request, idContenido);
 		}	
@@ -55,7 +55,7 @@ public class CarritoServlet extends HttpServlet {
 		HttpSession session = request.getSession();
 		Carrito carrito = null;
 
-		
+
 		Object objCarrito = session.getAttribute(SessionAttributeNames.CARRITO);
 		if (objCarrito != null) {
 			carrito = (Carrito) objCarrito;
@@ -64,16 +64,16 @@ public class CarritoServlet extends HttpServlet {
 		}
 		carrito.deleteLineaCarrito(idContenido);
 	}
-	
+
 	protected void addToCart(HttpServletRequest request, Integer idContenido) throws InstanceNotFoundException, DataException {
 		HttpSession session = request.getSession();
 		String idioma=SessionManager.get(request,WebConstants.USER_LOCALE).toString().substring(0,2).toUpperCase();
 		Carrito carrito = null;
 		boolean checkDuplicated ;
-		
+
 		Contenido anadir = new Contenido();
 		anadir = servicio.findById(idContenido, idioma);
-	
+
 		Object objCartBean = session.getAttribute(SessionAttributeNames.CARRITO);
 
 		if (objCartBean != null) {
@@ -85,7 +85,7 @@ public class CarritoServlet extends HttpServlet {
 		checkDuplicated=carrito.addLineaCarrito(anadir);
 		if (checkDuplicated) {
 			request.setAttribute(ParameterNames.CONTENIDO_DUPLICADO,AttributeNames.YA_EN_CARRITO);
-			
+
 		}
 	}
 

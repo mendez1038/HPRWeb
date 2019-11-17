@@ -16,72 +16,72 @@ import com.hpr.web.util.CookieManager;
 
 
 public class ConfigurationManager {
-	
-private static Logger logger = LogManager.getLogger(ConfigurationManager.class.getName());
-	
-    private static final String WEB_CONFIGURATION_FILE =
-        "WebConfiguration.properties";
-    
-    private static Map parameters;
 
-    static {
-        try {
-            Class configurationParametersManagerClass = ConfigurationManager.class;
-            ClassLoader classLoader = configurationParametersManagerClass.getClassLoader();
-            InputStream inputStream = classLoader.getResourceAsStream(WEB_CONFIGURATION_FILE);
-            Properties properties = new Properties();
-            properties.load(inputStream);
-            inputStream.close();
-            
-            parameters = Collections.synchronizedMap(properties);
-            
-        } catch (Throwable t) {
-        	logger.fatal(t.getMessage(), t);      
-        }
+	private static Logger logger = LogManager.getLogger(ConfigurationManager.class.getName());
 
-    }
+	private static final String WEB_CONFIGURATION_FILE =
+			"WebConfiguration.properties";
 
-    private static ConfigurationManager instance = null;
-    
-    /**
-     * Singleton Thread-Safe.
-     */
-    public static ConfigurationManager getInstance() {
-    	if (instance == null) {
-    		synchronized(ConfigurationManager.class) {
-    			if (instance == null) { // Necesario para proteger una segunda instanciación
-    				instance = new ConfigurationManager();
-    			}
-    		}
-    	}
-    	return instance;    	
-    }
-    
-    private ConfigurationManager() {    	
-    };
+	private static Map parameters;
 
-    /**
-     * Obtiene el valor de un parámetro de configuración.
-     * @param name Nombre del parámetro.
-     * @return Valor del parámetro o null si no se ha encontrado.
-     */
-    public String getParameter(String name) {
-        String value = (String) parameters.get(name);       
-        return value;
-    }
-    
-    
-    /**
-     * Para parametros que primero se buscan en una cookie, 
-     * y si no, en el fichero.
-     */
-    public String getParameter(HttpServletRequest request, String name) {
-    	Cookie c = CookieManager.getCookie(request, name);
-    	if (c!=null) {
-    		return c.getValue();
-    	} else {
-    		return getParameter(name);
-    	}
-    }
+	static {
+		try {
+			Class configurationParametersManagerClass = ConfigurationManager.class;
+			ClassLoader classLoader = configurationParametersManagerClass.getClassLoader();
+			InputStream inputStream = classLoader.getResourceAsStream(WEB_CONFIGURATION_FILE);
+			Properties properties = new Properties();
+			properties.load(inputStream);
+			inputStream.close();
+
+			parameters = Collections.synchronizedMap(properties);
+
+		} catch (Throwable t) {
+			logger.fatal(t.getMessage(), t);      
+		}
+
+	}
+
+	private static ConfigurationManager instance = null;
+
+	/**
+	 * Singleton Thread-Safe.
+	 */
+	public static ConfigurationManager getInstance() {
+		if (instance == null) {
+			synchronized(ConfigurationManager.class) {
+				if (instance == null) { // Necesario para proteger una segunda instanciación
+					instance = new ConfigurationManager();
+				}
+			}
+		}
+		return instance;    	
+	}
+
+	private ConfigurationManager() {    	
+	};
+
+	/**
+	 * Obtiene el valor de un parámetro de configuración.
+	 * @param name Nombre del parámetro.
+	 * @return Valor del parámetro o null si no se ha encontrado.
+	 */
+	public String getParameter(String name) {
+		String value = (String) parameters.get(name);       
+		return value;
+	}
+
+
+	/**
+	 * Para parametros que primero se buscan en una cookie, 
+	 * y si no, en el fichero.
+	 */
+	public String getParameter(HttpServletRequest request, String name) {
+		Cookie c = CookieManager.getCookie(request, name);
+		if (c!=null) {
+			return c.getValue();
+		} else {
+			return getParameter(name);
+		}
+	}
 
 }

@@ -1,6 +1,6 @@
 <%@ page import="java.util.List" %>
 <%@include file="/html/common/header.jsp"%>
-
+<main>
 <div id="buscador-resultados">
 
 
@@ -82,5 +82,5 @@
 
 	</c:if>
 </div>
-
+</main>
 <%@include file="/html/common/footer.jsp"%>
