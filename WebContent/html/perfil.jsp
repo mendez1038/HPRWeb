@@ -2,9 +2,10 @@
 <%@include file="/html/common/header.jsp"%>
 <main>
 <div class="registro-form">
-	<h1>
+	<div class="registro-form_box">
+    <div class="registro-form_titulo">
 		<fmt:message key="cuenta" bundle="${traducciones}" />
-	</h1>
+	</div>
 	<form action="<%=ControllerPaths.USUARIO%>" method="post">
 		<input type="hidden" name="<%=ParameterNames.ACTION%>"
 			value="<%=Actions.EDICION%>">
@@ -49,6 +50,7 @@
 		<input class="btn" type="submit"
 			value="<fmt:message key = "guardar" bundle="${traducciones}"/>" />
 	</form>
+	</div>
 </div>
 </main>
 <%@include file="/html/common/footer.jsp"%>

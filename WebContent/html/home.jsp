@@ -39,8 +39,8 @@
             <%
               } else {
               %>
-                <span class="sta-nuevo">40€</span>
-                <span class="sta-porcentaje">10€</span>
+                <span class="sta-nuevo"></span>
+                <span class="sta-porcentaje"></span>
                 <span class="sta-precio"><%=resultado.getPrecio()%></span>
                 <%} %>
               </div>
@@ -89,91 +89,6 @@
 		</p>
 	</div>
 	
-	<%-- <h2><fmt:message key = "masvendidos" bundle="${traducciones}"/></h2>
-		<%	
-		if (all!=null && !all.isEmpty()) {
-			%>
-			<%
-			for (Contenido resultado: all) {
-				%>
-				<div class="preview">
-				<a href="<%=ControllerPaths.CONTENIDO%>?
-						<%=ParameterNames.ACTION%>=<%=Actions.BUSCAR_ID%>&amp;<%=ParameterNames.ID%>=
-						<%=resultado.getIdContenido()%>">
-						<%=resultado.getTitulo()%></a>	
-				</div>
-				<%}%>
-		<%}%> 
-	<%
-		if (rebajas != null && !rebajas.isEmpty()) {
-	%>
-	
-		<div class="tpl-title-hp">
-    	<div class="sta-title-hp_max">
-      		<div class="sta-title-hp_titulo"><fmt:message key = "rebajas" bundle="${traducciones}"/></div>
-    	</div>
-  	</div>
-	<div class="tpl-cajas-hp">
-    	<ul class="sta-cajas-hp_max">
-	<%
-		for (Contenido resultado_rebajas : rebajas) {
-	%><li class="sta-cajas-hp_caja">
-		<a title="<%=resultado_rebajas.getTitulo()%>" href="<%=ControllerPaths.CONTENIDO%>?<%=ParameterNames.ACTION%>=<%=Actions.BUSCAR_ID%>&amp;<%=ParameterNames.ID%>=<%=resultado_rebajas.getIdContenido()%>">
-			<div class="sta-cajas-hp_img" style="background-image: url('<%=resultado_rebajas.getPortada()%>');"></div>
-            <div class="sta-cajas-hp_titulo">
-              <%=resultado_rebajas.getTitulo()%>
-              <div class="sta-cajas-hp_precio">
-                <span class="sta-tachado">40€</span>
-                <span class="sta-descuento">10€</span>
-                <span class="sta-precio"><%=resultado_rebajas.getPrecio()%></span>
-              </div>
-            </div>
-		</a>
-	</li><%
-		}
-	%>
-		</ul><%
-		}
-	%>
-	</div>
-	<div class="paginacion">
-		<p>
-		<center>
-			<c:url var="urlBase" value="/index" scope="page"></c:url>
-			<!-- A la anterior pagina -->
-			<c:if test="${page > 1}">
-				<a href="${urlBase}?page=${page - 1}"> <fmt:message key="anterior" bundle="${traducciones}" /></a>&nbsp;&nbsp;
-			</c:if>
-			<c:if test="${totalPagesSales > 1}">
-				<c:if test="${firstPagedPageSales > 2}">
-					<a href="${urlBase}?page=1"><b>1</b></a>
-					<c>&nbsp;.&nbsp;.&nbsp;.&nbsp;</c>
-				</c:if>
-				<c:forEach begin="${firstPagedPageSales}" end="${lastPagedPageSales}" var="i">
-					<c:choose>
-						<c:when test="${page != i}">
-							&nbsp;<a href="${urlBase}?page=${i}"><b>${i}</b></a>&nbsp;
-						</c:when>
-						<c:otherwise>
-								&nbsp;<b>${i}</b>&nbsp;
-						</c:otherwise>
-					</c:choose>
-				</c:forEach>
-				<c:if test="${lastPagedPageSales < totalPagesSales-1}">
-					<c>&nbsp;.&nbsp;.&nbsp;.&nbsp;</c>
-					<a href="${urlBase}?page=${totalPagesSales}"><b>${totalPagesSales}</b></a>
-				</c:if>
-			</c:if>
-			<!-- A la siguiente pÃ¡gina -->
-			<c:if test="${page < totalPagesSales}">
-				&nbsp;&nbsp;<a href="${urlBase}?page=${page + 1}"> <fmt:message key="siguiente" bundle="${traducciones}"/></a>
-			</c:if>
-		</center>
-		</p>
-	</div>
-	
-	
-	--%>
 	</div>
 </div>
 </main>

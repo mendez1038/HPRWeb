@@ -26,6 +26,7 @@ public interface ParameterNames {
 	public static final String EN="en";
 	public static final String ES="es";
 	public static final String PAGE="page";
+	public static final String PAGE_SALES="pageSales";
 	public static final String CONTENIDO_DUPLICADO="contenido_duplicado";
 	public static final String CATEGORIA="categoria";
 	public static final String URL="url";

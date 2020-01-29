@@ -2,9 +2,11 @@
 <%@include file="/html/common/header.jsp"%>
 <main>
 <div class="registro-form">
-	<h1>
+	<div class="registro-form_box">
+    <div class="registro-form_titulo">
+	
 		<fmt:message key="registroform" bundle="${traducciones}" />
-	</h1>
+	</div>
 	<form action="<%=ControllerPaths.USUARIO%>" method="post">
 		<input type="hidden" name="<%=ParameterNames.ACTION%>"
 			value="<%=Actions.REGISTRO%>">
@@ -37,7 +39,7 @@
 		</div>
 
 		<label><fmt:message key="fechanacimiento"
-				bundle="${traducciones}" /></label><input type="date"
+				bundle="${traducciones}" /></label><input class="fecha" type="date"
 			name="<%=ParameterNames.FECHA_NACIMIENTO%>" required>
 
 		<div class="text-box">
@@ -50,7 +52,7 @@
 	<label><fmt:message key="sicuenta" bundle="${traducciones}" />
 	</label> <a href="<%=request.getContextPath() + ViewPaths.LOGIN%>"><fmt:message
 			key="iniciosesion" bundle="${traducciones}" /></a>
-
+	</div>
 </div>
 </main>
 <%@include file="/html/common/footer.jsp"%>

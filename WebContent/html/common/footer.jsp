@@ -12,7 +12,7 @@
 					|<a href="<%=ControllerPaths.USUARIO%>?<%=ParameterNames.ACTION%>=<%=Actions.CAMBIAR_IDIOMA%>&amp;<%=ParameterNames.LOCALE%>=<%=ParameterNames.EN%>">EN</a>]
 				</div>
 				<ul class="contacto">
-					<li><a href="#"><fmt:message key="quiensomos" bundle="${traducciones}"/></a></li>
+					<li><a href="<%=request.getContextPath()%>/html/quienes-somos.jsp"><fmt:message key="quiensomos" bundle="${traducciones}"/></a></li>
 					<li><a href="javascript:void(0)" class="myBtn"><fmt:message key="contacto" bundle="${traducciones}"/></a></li>
 					<div  class="modal">
 					  <div class="modal-content">

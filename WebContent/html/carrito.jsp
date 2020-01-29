@@ -1,41 +1,39 @@
 <%@include file="/html/common/header.jsp"%>
 <main>
-<div id="carrito">
-
-
+<div class="tpl-carrito-hp">
+    <div class="tpl-carrito-hp_max">
 	<c:set var="carrito" value='${sessionScope["carrito"]}' scope="session" />
-	<h1>
+	<div class="tpl-carrito-hp_titulo">
 		<fmt:message key="carrito" bundle="${traducciones}"></fmt:message>
-	</h1>
+	</div>
 
 	<c:choose>
 		<c:when test="${carrito!=null}">
 			<c:forEach items="${carrito.getLineas()}" var="lineas">
-				<div class="lineacarrito">
+				<div class="tpl-carrito-hp_lineacarrito">
 					<img src="${lineas.getContenido().getPortada()}" width="50px">
-					${lineas.getContenido().getTitulo()} <span><fmt:message
-							key="precio" bundle="${traducciones}" />:${lineas.getContenido().getPrecio()}
-						$</span> <span>- ${lineas.getContenido().getPrecioDescontado()} $</span>
-					<a class="enlace"
+					<span>
+						${lineas.getContenido().getTitulo()} 
+						<fmt:message key="precio" bundle="${traducciones}" />
+						:${lineas.getContenido().getPrecio()} $
+						- ${lineas.getContenido().getPrecioDescontado()} $
+						<a class="enlace"
 						href="<%=ControllerPaths.CARRITO %>?<%=ParameterNames.ACTION%>=<%=Actions.ELIMINAR%>&amp;<%=ParameterNames.ID%>=${lineas.getContenido().getIdContenido()}">X</a>
+					</span>
 				</div>
-
 			</c:forEach>
-			<div class="carritofinal">
+			<div class="tpl-carrito-hp_carritofinal">
 				<fmt:message key="total" bundle="${traducciones}" />
 				: ${carrito.getTotal()} $
 			</div>
-
 		</c:when>
 		<c:otherwise>
-			<div>
-				<p>
-					<fmt:message key="nocarrito" bundle="${traducciones}" />
-				</p>
+			<div class="tpl-carrito-hp_nocarrito">
+				<fmt:message key="nocarrito" bundle="${traducciones}" />
 			</div>
 		</c:otherwise>
 	</c:choose>
-
+</div>
 </div>
 </main>
 <%@include file="/html/common/footer.jsp"%>

@@ -47,15 +47,17 @@ public class IndexServlet extends HttpServlet {
 		String idiomaPagina=SessionManager.get(request,WebConstants.USER_LOCALE).toString().substring(0,2).toUpperCase();
 		int page = WebUtils.
 				getPageNumber(request.getParameter(ParameterNames.PAGE), 1);
-
+		
 		Results<Contenido> novedades;
 		
 		try {
-
+			
+			
 			
 			novedades = servicio.findAllByDate(idiomaPagina, (page-1)*pageSize+1, pageSize);
 			request.setAttribute(AttributeNames.RESULTADOS_NOVEDADES, novedades.getPage());
 			request.setAttribute(AttributeNames.TOTAL, novedades.getTotal());
+			
 
 			int totalPages = (int) Math.ceil(novedades.getTotal()/(double)pageSize);
 			int firstPagedPage = Math.max(1, page-pagingPageCount);
