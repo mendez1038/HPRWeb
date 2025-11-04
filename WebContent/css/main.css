@@ -512,3 +512,87 @@ a#logo {
   background-color: #95a5a6;
   color: #fff;
 }
+
+/* === RESULTADOS DE BÚSQUEDA === */
+
+#buscador-resultados {
+  max-width: 1200px;
+  margin: 3rem auto;
+  padding: 0 1rem;
+}
+
+#buscador-resultados h1 {
+  font-family: "Montserrat", sans-serif;
+  font-size: 2rem;
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #333;
+}
+
+#buscador-resultados ul {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.5rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.resultado-item {
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.resultado-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.resultado-item .preview img {
+  width: 100%;
+  height: 340px;
+  object-fit: cover;
+  display: block;
+}
+
+.resultado-item .info {
+  padding: 1rem 1.2rem 1.5rem;
+}
+
+.resultado-item .info h3 {
+  font-family: "Montserrat", sans-serif;
+  font-size: 1.2rem;
+  margin: 0 0 0.5rem;
+  color: #222;
+}
+
+.resultado-item .info p {
+  font-family: "Lato", sans-serif;
+  font-size: 0.95rem;
+  color: #555;
+  margin: 0.3rem 0;
+}
+
+.resultado-item .info strong {
+  color: #2a7ae2;
+  font-weight: 700;
+}
+
+.resultado-item .descuento {
+  font-size: 0.9rem;
+  color: #e63946;
+  font-weight: bold;
+  margin-left: 0.5rem;
+}
+
+
+
+@media (max-width: 768px) {
+  .resultado-item .preview img {
+    height: 280px;
+  }
+}
+

@@ -1,103 +1,131 @@
-<%@ page import="java.util.List"%>
+<%@ page
+	import="com.hpr.web.controller.*, com.david.training.service.*, com.david.training.model.*,java.util.List"
+	contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@include file="/html/common/header.jsp"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <main>
-	<div id="buscador-resultados">
+    <div class="modulo-home">
+        <div class="modulo-home_max">
 
+            <div class="tpl-title-hp">
+                <div class="sta-title-hp_max">
+                    <div class="sta-title-hp_titulo">
+                        Resultados de la búsqueda: ${total_busqueda}</p>
+                    </div>
+                </div>
+            </div>
 
-		<c:set var="resultados" value="${requestScope.resultados}" />
-		<h1>
-			<fmt:message key="resultados" bundle="${traducciones}"></fmt:message>
-		</h1>
-		<c:if test="${not empty resultados}">
+            <% 
+                List<Contenido> resultadosBusqueda =
+                    (List<Contenido>) request.getAttribute(AttributeNames.RESULTADOS_BUSQUEDA);
+                if (resultadosBusqueda == null || resultadosBusqueda.isEmpty()) {
+            %>
+                <div class="tpl-cajas-hp">
+                    <p style="text-align: center; padding: 2rem 0; color:#fff;">
+                        No se han encontrado contenidos para tu búsqueda.
+                    </p>
+                </div>
+            <%
+                } else {
+            %>
 
-			<ul>
+            <div class="tpl-cajas-hp">
+                <ul class="sta-cajas-hp_max">
+                    <%
+                        for (Contenido resultado : resultadosBusqueda) {
+                    %>
+                        <li class="sta-cajas-hp_caja">
+                            <a title="<%=resultado.getTitulo()%>"
+                               href="<%=ControllerPaths.CONTENIDO%>?<%=ParameterNames.ACTION%>=<%=Actions.BUSCAR_ID%>&amp;<%=ParameterNames.ID%>=<%=resultado.getIdContenido()%>">
 
-				<c:forEach items="${resultados}" var="r">
+                                <div class="sta-cajas-hp_img"
+                                     style="background-image: url('<%=resultado.getPortada()%>');"></div>
 
-					<c:url var="urlDetalle" scope="page" value="/contenido">
-						<c:param name="action" value="buscar_id" />
-						<c:param name="id" value="${r.idContenido}" />
-					</c:url>
-					<li class="resultado-item">
-						<div class="preview">
-							<a title="${r.titulo}" href="${urlDetalle}"> <img
-								src="${r.portada}" alt="${r.titulo}">
-							</a>
-						</div>
-						<div class="info">
-							<h3>${r.titulo}</h3>
-							<p>${r.descripcionBreve}</p>
-							<c:if test="${not empty r.precio}">
-								<p>
-									<fmt:message key="precio" bundle="${traducciones}" />
-									: <strong>${r.precio} €</strong>
-									<c:if test="${r.precioDescontado ne null}">
-										<span class="descuento"> → ${r.precioDescontado} €</span>
-									</c:if>
-								</p>
-							</c:if>
-						</div>
-					</li>
-				</c:forEach>
+                                <%
+                                    if (resultado.getPrecioDescontado() > 0) {
+                                        double nuevoPrecio = resultado.getPrecio() - resultado.getPrecioDescontado();
+                                %>
+                                    <div class="sta-cajas-hp_titulo">
+                                        <%=resultado.getTitulo()%>
+                                        <div class="sta-cajas-hp_precio">
+                                            <span class="sta-nuevo sta-descuento"><%=nuevoPrecio%>€</span>
+                                        </div>
+                                    </div>
+                                <%
+                                    } else {
+                                %>
+                                    <div class="sta-cajas-hp_titulo">
+                                        <%=resultado.getTitulo()%>
+                                        <div class="sta-cajas-hp_precio">
+                                            <span class="sta-nuevo"></span>
+                                            <span class="sta-porcentaje"></span>
+                                            <span class="sta-precio"><%=resultado.getPrecio()%> €</span>
+                                        </div>
+                                    </div>
+                                <%
+                                    }
+                                %>
+                            </a>
+                        </li>
+                    <%
+                        } // fin for
+                    %>
+                </ul>
+            </div>
 
-			</ul>
+            <!-- paginación igual que en la home pero usando /contenido -->
+            <div class="paginacion">
+                <p>
+                    <center>
+                        <c:url var="urlBase" value="/contenido" scope="page"></c:url>
 
-			<div class="paginacion">
-				<p>
-				<center>
-					<c:url var="urlBase" value="/contenido" scope="page">
-						<c:param name="action" value="buscar" />
-					</c:url>
+                        <c:if test="${page > 1}">
+                            <a href="${urlBase}?action=buscar${url}&page_busqueda=${page - 1}">
+                                <fmt:message key="anterior" bundle="${traducciones}" />
+                            </a>&nbsp;&nbsp;
+                        </c:if>
 
-					<!-- A la anterior pagina -->
-					<c:if test="${page > 1}">
-						<a href="${urlBase}${url}&page=${page - 1}"> <fmt:message
-								key="anterior" bundle="${traducciones}" />
-						</a>
-							&nbsp;&nbsp;
-						</c:if>
+                        <c:if test="${totalPages > 1}">
+                            <c:if test="${firstPagedPage > 2}">
+                                <a href="${urlBase}?action=buscar${url}&page_busqueda=1"><b>1</b></a>
+                                <c>&nbsp;.&nbsp;.&nbsp;.&nbsp;</c>
+                            </c:if>
 
-					<c:if test="${totalPages > 1}">
+                            <c:forEach begin="${firstPagedPage}" end="${lastPagedPage}" var="i">
+                                <c:choose>
+                                    <c:when test="${page != i}">
+                                        &nbsp;<a href="${urlBase}?action=buscar${url}&page_busqueda=${i}"><b>${i}</b></a>&nbsp;
+                                    </c:when>
+                                    <c:otherwise>
+                                        &nbsp;<b>${i}</b>&nbsp;
+                                    </c:otherwise>
+                                </c:choose>
+                            </c:forEach>
 
-						<c:if test="${firstPagedPage > 2}">
-							<a href="${urlBase}${url}&page=1"><b>1</b></a>
-							<b>&nbsp;.&nbsp;.&nbsp;.&nbsp;</b>
-						</c:if>
+                            <c:if test="${lastPagedPage < totalPages-1}">
+                                <c>&nbsp;.&nbsp;.&nbsp;.&nbsp;</c>
+                                <a href="${urlBase}?action=buscar${url}&page_busqueda=${totalPages}">
+                                    <b>${totalPages}</b>
+                                </a>
+                            </c:if>
+                        </c:if>
 
-						<c:forEach begin="${firstPagedPage}" end="${lastPagedPage}"
-							var="i">
-							<c:choose>
-								<c:when test="${page != i}">
-										&nbsp;<a href="${urlBase}${url}&page=${i}"><b>${i}</b></a>&nbsp;
-								  </c:when>
-								<c:otherwise>
-										&nbsp;<b>${i}</b>&nbsp;
-								  </c:otherwise>
-							</c:choose>
-						</c:forEach>
+                        <c:if test="${page < totalPages}">
+                            &nbsp;&nbsp;<a href="${urlBase}?action=buscar${url}&page_busqueda=${page + 1}">
+                                <fmt:message key="siguiente" bundle="${traducciones}" />
+                            </a>
+                        </c:if>
+                    </center>
+                </p>
+            </div>
 
-						<c:if test="${lastPagedPage < totalPages-1}">
-							<b>&nbsp;.&nbsp;.&nbsp;.&nbsp;</b>
-							<a href="${urlBase}${url}&page=${totalPages}"><b>${totalPages}</b></a>
-						</c:if>
+            <%
+                } // fin else
+            %>
 
-					</c:if>
-
-					<!-- A la siguiente pÃ¡gina -->
-					<c:if test="${page < totalPages}">
-							&nbsp;&nbsp;		
-							<a href="${urlBase}${url}&page=${page + 1}"> <fmt:message
-								key="siguiente" bundle="${traducciones}" />
-						</a>
-					</c:if>
-
-				</center>
-				</p>
-			</div>
-
-
-
-		</c:if>
-	</div>
+        </div>
+    </div>
 </main>
+
 <%@include file="/html/common/footer.jsp"%>

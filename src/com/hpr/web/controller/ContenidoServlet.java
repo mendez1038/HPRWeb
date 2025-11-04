@@ -1,5 +1,4 @@
 package com.hpr.web.controller;
-
 import java.io.IOException;
 import java.util.Locale;
 
@@ -18,10 +17,10 @@ import com.david.training.dao.PedidoDAO;
 import com.david.training.dao.impl.LineaPedidoDAOImpl;
 import com.david.training.dao.impl.PedidoDAOImpl;
 import com.david.training.exceptions.DataException;
+import com.david.training.exceptions.ServiceException;
 import com.david.training.model.Artista;
 import com.david.training.model.Contenido;
-
-import com.david.training.model.ProductoCriteria;
+import com.david.training.model.ContenidoCriteria;
 import com.david.training.model.Usuario;
 import com.david.training.service.ContenidoService;
 import com.david.training.service.FavoritoService;
@@ -41,7 +40,6 @@ import com.hpr.web.util.WebUtils;
 @WebServlet("/contenido")
 public class ContenidoServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
 	private static Logger logger = LogManager.getLogger(ContenidoServlet.class.getName());
 	private ContenidoService servicio = null;
 	private FavoritoService servicioFavoritos = null;
@@ -52,7 +50,6 @@ public class ContenidoServlet extends HttpServlet {
 			ConfigurationManager.getInstance().getParameter(ConfigurationParameterNames.RESULTS_PAGE_SIZE_DEFAULT)) + 1;
 	private static int pagingPageCount = Integer.valueOf(
 			ConfigurationManager.getInstance().getParameter(ConfigurationParameterNames.RESULTS_PAGING_PAGE_COUNT));
-
 	public ContenidoServlet() {
 		super();
 		servicio = new ContenidoServiceImpl();
@@ -60,9 +57,7 @@ public class ContenidoServlet extends HttpServlet {
 		pedidoDao = new PedidoDAOImpl();
 		lpDao = new LineaPedidoDAOImpl();
 		servicioPedido = new PedidoServiceImpl(pedidoDao, lpDao);
-
 	}
-
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// servlet parameters
@@ -70,87 +65,77 @@ public class ContenidoServlet extends HttpServlet {
 		String target = null;
 		String idioma = null;
 		int pageBusqueda = WebUtils.getPageNumber(request.getParameter(ParameterNames.PAGE_BUSQUEDA), 1);
-
 		if (logger.isDebugEnabled()) {
 			logger.debug("Action {}: {}", action, ToStringBuilder.reflectionToString(request.getParameterMap()));
 		}
-
 		// Objetos
 		Errors errors = new Errors();
 		StringBuilder targetString = new StringBuilder();
-		ProductoCriteria pc = null;
 		Contenido contenidoDetalle = null;
+		ContenidoCriteria cc = null;
 		Artista artista = null;
-
 		// listas
 		Results<Contenido> resultados = null;
-
 		// parametros
 		String titulo = null;
 		String restriccionEdad = null;
 		String tipoContenido = null;
 		String artistaNombre = null;
-//		String[] generos = null;
-//		Integer descuento = null;
-		@SuppressWarnings("unused")
-		String ano = null;
 		String idContenido = null;
 		Integer id = null;
-
 		if (Actions.BUSCAR.equalsIgnoreCase(action)) {
-
 			titulo = request.getParameter(ParameterNames.TITULO);
 			restriccionEdad = request.getParameter(ParameterNames.RESTRICCION_EDAD);
 			tipoContenido = request.getParameter(ParameterNames.TIPO_CONTENIDO);
 			artistaNombre = request.getParameter(ParameterNames.ARTISTA);
-			pc = new ProductoCriteria();
-//			generos = request.getParameterValues(ParameterNames.CATEGORIA);
-//			descuento = null;
-//			if (request.getParameter(ParameterNames.DESCUENTO) != "") {
-//				descuento = Integer.valueOf(request.getParameter(ParameterNames.DESCUENTO));
-//			}
-//			ano = request.getParameter(ParameterNames.ANO);
+		    cc = new ContenidoCriteria();
 
-			if (titulo != null && !titulo.trim().isEmpty()) {
-				pc.setTitulo(titulo.trim());
-				targetString.append("&" + ParameterNames.TITULO + "=" + pc.getTitulo());
-			} else {
-				errors.add(ParameterNames.ACTION, ErrorCodes.SEARCH_ERROR);
-			}
-			if (restriccionEdad != null && !"null".equalsIgnoreCase(restriccionEdad)) {
-				pc.setRestriccionEdad(restriccionEdad);
-				targetString.append("&" + ParameterNames.RESTRICCION_EDAD + "=" + pc.getRestriccionEdad());
-			}
-			if (tipoContenido != null && !tipoContenido.trim().isEmpty()) {
-				pc.setTipoContenido(tipoContenido);
-				targetString.append("&" + ParameterNames.TIPO_CONTENIDO + "=" + pc.getTipoContenido());
-			}
-			if (artistaNombre != null && !artistaNombre.trim().isEmpty()) {
-				artista = new Artista();
-				artista.setNombreArtista(artistaNombre.trim());
-				pc.setA(artista);
-			}
-//			if (descuento != null) {
-//				pc.setPorcentaje(descuento);
-//				;
-//				targetString.append("&" + ParameterNames.DESCUENTO + "=" + pc.getPorcentaje());
-//			}
-//
-//			if (generos != null) {
-//				pc.setCategoria(ArrayUtils.arrayToCategoria(generos));
-//				targetString.append("&" + ParameterNames.CATEGORIA + "=" + pc.getCategoria());
-//			}
 
-			// idioma desde la sesión (multiidioma)
+		    boolean hayFiltros = false;
+
+		    if (titulo != null && !titulo.trim().isEmpty()) {
+		        cc.setTitulo(titulo.trim());
+		        targetString.append("&" + ParameterNames.TITULO + "=" + cc.getTitulo());
+		        hayFiltros = true;
+		    }
+
+		    if (restriccionEdad != null && !"null".equalsIgnoreCase(restriccionEdad)) {
+		        cc.setRestriccionEdad(restriccionEdad);
+		        targetString.append("&" + ParameterNames.RESTRICCION_EDAD + "=" + cc.getRestriccionEdad());
+		        hayFiltros = true;
+		    }
+
+		    if (tipoContenido != null && !tipoContenido.trim().isEmpty()) {
+		        cc.setIdTipoContenido(tipoContenido);
+		        targetString.append("&" + ParameterNames.TIPO_CONTENIDO + "=" + cc.getIdTipoContenido());
+		        hayFiltros = true;
+		    }
+
+		    if (artistaNombre != null && !artistaNombre.trim().isEmpty()) {
+		        artista = new Artista();
+		        artista.setNombreArtista(artistaNombre.trim());
+		        cc.setArtista(artista.getNombreArtista());
+		        targetString.append("&" + ParameterNames.ARTISTA + "=" + artista.getNombreArtista());
+		        hayFiltros = true;
+		    }
+
+		    // Si no se ha metido NADA, ahora sí marcamos error
+		    if (!hayFiltros) {
+		        errors.add(ParameterNames.ACTION, ErrorCodes.SEARCH_ERROR);
+		    }
+
 			Locale locale = (Locale) SessionManager.get(request, WebConstants.USER_LOCALE);
 			idioma = locale != null ? locale.getLanguage() : "es";
-
+			// Opcional: definir orden por defecto
+		    cc.setSortBy("FECHA_LANZAMIENTO");
+		    cc.setDesc(true);
+		    pageSize = 20;
 			if (errors.hasErrors()) {
-
 				target = ViewPaths.INDEX;
 			} else {
 				try {
-					resultados = servicio.busquedaEstructurada(pc, idioma, 1, 20);
+					
+					resultados = servicio.findByCriteria(cc,idioma, pageBusqueda, pageSize);
 					request.setAttribute(ParameterNames.URL, targetString.toString());
 					request.setAttribute(AttributeNames.RESULTADOS_BUSQUEDA, resultados.getPage());
 					request.setAttribute(AttributeNames.TOTAL_BUSQUEDA, resultados.getTotal());
@@ -163,21 +148,18 @@ public class ContenidoServlet extends HttpServlet {
 					request.setAttribute("firstPagedPage", firstPagedPageBusqueda);
 					request.setAttribute("lastPagedPage", lastPagedPageBusqueda);
 					target = ViewPaths.BUSQUEDA;
-					logger.info(pc);
-				} catch (DataException e) {
+					logger.info(cc);
+				} catch (DataException | ServiceException e) {
 					logger.warn("Busqueda... ", e);
 					errors.add(ParameterNames.ACTION, ErrorCodes.SEARCH_ERROR);
+					target = ViewPaths.INDEX;
 				}
-
 			}
-
-			// vista detalle
 		} else if (Actions.BUSCAR_ID.equalsIgnoreCase(action)) {
 
 			idioma = SessionManager.get(request, WebConstants.USER_LOCALE).toString();
 			idContenido = request.getParameter(ParameterNames.ID);
 			id = Integer.valueOf(idContenido);
-
 			try {
 				contenidoDetalle = servicio.findById(id, idioma);
 			} catch (Exception e) {
@@ -185,35 +167,28 @@ public class ContenidoServlet extends HttpServlet {
 				errors.add(ParameterNames.ACTION, ErrorCodes.DETALLE_ERROR);
 
 			}
-			
 			Usuario usuario = (Usuario) SessionManager.get(request, SessionAttributeNames.USER);
 			boolean esFavorito = false;
-			
-			if(usuario != null) {
+			if (usuario != null) {
 				try {
 					esFavorito = servicioFavoritos.esFavorito(usuario.getEmail(), contenidoDetalle.getIdContenido());
 				} catch (DataException e) {
 					e.printStackTrace();
 				}
 			}
-			
 			boolean comprado = false;
 			if (usuario != null) {
-			    try {
-			        comprado = servicioPedido.comprado(usuario.getEmail(), contenidoDetalle.getIdContenido());
-			    } catch (DataException e) { /* log o ignora para no romper la vista */ }
+				try {
+					comprado = servicioPedido.comprado(usuario.getEmail(), contenidoDetalle.getIdContenido());
+				} catch (DataException e) {
+					/* log o ignora para no romper la vista */ }
 			}
-			
 			// Añade ambos al request
 			request.setAttribute(AttributeNames.CONTENIDO, contenidoDetalle);
 			request.setAttribute(AttributeNames.ES_FAVORITO, Boolean.valueOf(esFavorito));
 			request.setAttribute("comprado", comprado);
-			
-			 
-
 			if (errors.hasErrors()) {
 				target = ViewPaths.HOME;
-
 			} else {
 				request.setAttribute(AttributeNames.CONTENIDO, contenidoDetalle);
 				target = ViewPaths.VISTA_DETALLE;
@@ -224,7 +199,6 @@ public class ContenidoServlet extends HttpServlet {
 		}
 		logger.info("➡️ Redirigiendo a vista: " + target);
 		request.getRequestDispatcher(target).forward(request, response);
-
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)

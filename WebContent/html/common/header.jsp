@@ -2,7 +2,6 @@
 	pageEncoding="UTF-8"%>
 <%@ page
 	import="com.hpr.web.controller.*, com.hpr.web.model.*, com.david.training.model.*, com.david.training.service.*, com.hpr.web.util.*, java.util.List"%>
-
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
@@ -27,13 +26,11 @@
 <script src="<%=request.getContextPath()%>/js/14.9.5.min.js"></script>
 </head>
 <%
-Errors errors = (Errors) request.getAttribute(AttributeNames.ERRORS);
-if (errors == null)
-	errors = new Errors();
-
-List<Categoria> categorias = (List<Categoria>) request.getAttribute(AttributeNames.CATEGORIAS);
 List<TipoContenido> tipos = (List<TipoContenido>) request.getAttribute(AttributeNames.TIPOS);
-List<Pais> paises = (List<Pais>) request.getAttribute(AttributeNames.PAISES);
+Errors errors = (Errors) request.getAttribute(AttributeNames.ERRORS);
+if (errors != null) {
+	errors = new Errors();
+}
 %>
 <body>
 	<div id="body">
@@ -56,42 +53,35 @@ List<Pais> paises = (List<Pais>) request.getAttribute(AttributeNames.PAISES);
 							href="<%=request.getContextPath() + ViewPaths.CARRITO%>"><fmt:message
 									key="carrito" bundle="${traducciones}" /></a></li>
 						<li>
-							<form action="${pageContext.request.contextPath}/contenido"
-								method="get">
-								<input type="hidden" name="<%=ParameterNames.ACTION%>"
-									value="<%=Actions.BUSCAR%>" /> <input id="buscador"
-									type="text" name="<%=ParameterNames.TITULO%>"
-									value="<%=ParameterUtils.getParameter(request, ParameterNames.TITULO)%>"
-									placeholder="<fmt:message key = "busqueda" bundle="${traducciones}"/>" />
-								<input class="boton" type="submit"
-									value="<fmt:message key = "buscar" bundle="${traducciones}"/>">
+							<form action="${pageContext.request.contextPath}/contenido" method="get">
+								<input type="hidden" name="<%=ParameterNames.ACTION%>" value="<%=Actions.BUSCAR%>" /> 
+								<input id="buscador" type="text" name="<%=ParameterNames.TITULO%>" value="<%=ParameterUtils.getParameter(request, ParameterNames.TITULO)%>" 
+										placeholder="<fmt:message key = "busqueda" bundle="${traducciones}"/>" />
+								<input class="boton" type="submit" value="<fmt:message key = "buscar" bundle="${traducciones}"/>">
 								<div id="menudes" class="menudes-contido">
-									<%-- <div class="filtro">
-								<label><fmt:message key="categoria"
-										bundle="${traducciones}" /></label> <select
-									name="<%=ParameterNames.CATEGORIA%>">
-									<option selected value="null"></option>
-									<%
-										for (Categoria c : categorias) {
-									%>
-									<option value="<%=c.getIdCategoria()%>"><%=c.getNombreCategoria()%></option>
-									<%
-										}
-									%>
-								 </select>
-								 </div>--%>
 									<div class="filtro">
 										<label><fmt:message key="restriccionedad"
 												bundle="${traducciones}" /></label> <select
 											name="<%=ParameterNames.RESTRICCION_EDAD%>">
 											<option value="null"></option>
-											<option value="TP"><fmt:message key="todospublicos"
-													bundle="${traducciones}" /></option>
-											<option value="7+">7+</option>
-											<option value="12+">12+</option>
-											<option value="16+">16+</option>
-											<option value="18+">18+</option>
+											<option value="TP"
+												<%="TP".equals(request.getParameter(ParameterNames.RESTRICCION_EDAD)) ? "selected='selected'" : ""%>>
+												<fmt:message key="todospublicos" bundle="${traducciones}" />
+											</option>
+											<option value="7+"
+												<%="7+".equals(request.getParameter(ParameterNames.RESTRICCION_EDAD)) ? "selected='selected'" : ""%>>
+												7+</option>
+											<option value="12+"
+												<%="12+".equals(request.getParameter(ParameterNames.RESTRICCION_EDAD)) ? "selected='selected'" : ""%>>
+												12+</option>
+											<option value="16+"
+												<%="16+".equals(request.getParameter(ParameterNames.RESTRICCION_EDAD)) ? "selected='selected'" : ""%>>
+												16+</option>
+											<option value="18+"
+												<%="18+".equals(request.getParameter(ParameterNames.RESTRICCION_EDAD)) ? "selected='selected'" : ""%>>
+												18+</option>
 										</select>
+
 									</div>
 									<div class="filtro">
 										<label><fmt:message key="tipocontenido"
@@ -99,38 +89,19 @@ List<Pais> paises = (List<Pais>) request.getAttribute(AttributeNames.PAISES);
 											name="<%=ParameterNames.TIPO_CONTENIDO%>">
 											<option value=""></option>
 											<%
+											String tipoSeleccionado = request.getParameter(ParameterNames.TIPO_CONTENIDO);
 											for (TipoContenido tc : tipos) {
+												String idTipoStr = String.valueOf(tc.getIdTipoContenido());
 											%>
-											<option value="<%=tc.getIdTipoContenido()%>"><%=tc.getNombreContenido()%></option>
+											<option value="<%=idTipoStr%>"
+												<%=idTipoStr.equals(tipoSeleccionado) ? "selected='selected'" : ""%>>
+												<%=tc.getNombreContenido()%>
+											</option>
 											<%
 											}
 											%>
 										</select>
-									</div>
-									<div class="filtro">
-										<%-- <label><fmt:message key="pais" bundle="${traducciones}" /></label>
-								<select name="<%=ParameterNames.PAIS%>">
-									<option value="null"></option>
-									<%
-										for (Pais pais : paises) {
-									%>
-									<option value="<%=pais.getIdPais()%>"><%=pais.getNombrePais()%></option>
-									<%
-										}
-									%>
-								</select> --%>
-									</div>
-									<div class="filtro">
-										<%-- <label><fmt:message key = "descuento" bundle="${traducciones}"/></label>
-						<select name="<%=ParameterNames.DESCUENTO%>" >
-							<option value=""></option> 
-							<option value="5">5%</option> 
-							<option value="10">10%</option> 
-							<option value="15">15%</option> 
-							<option value="25">25%</option> 
-							<option value="30">30%</option> 
-							<option value="50">50%</option> 
-						</select> --%>
+
 									</div>
 									<div class="filtro">
 										<input id="buscador2" type="text"
