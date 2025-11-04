@@ -22,11 +22,11 @@ public class ConfigurationManager {
 	private static final String WEB_CONFIGURATION_FILE =
 			"WebConfiguration.properties";
 
-	private static Map parameters;
+	private static Map<?, ?> parameters;
 
 	static {
 		try {
-			Class configurationParametersManagerClass = ConfigurationManager.class;
+			Class<ConfigurationManager> configurationParametersManagerClass = ConfigurationManager.class;
 			ClassLoader classLoader = configurationParametersManagerClass.getClassLoader();
 			InputStream inputStream = classLoader.getResourceAsStream(WEB_CONFIGURATION_FILE);
 			Properties properties = new Properties();

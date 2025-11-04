@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <%@ page
 	import="com.hpr.web.controller.*, com.hpr.web.model.*, com.david.training.model.*, com.david.training.service.*, com.hpr.web.util.*, java.util.List"%>
 
@@ -14,7 +14,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<meta http-equiv="Content-Type" content="text/html; charset='UTF-8'">
 <title>HPR WEB</title>
 <link
 	href="https://fonts.googleapis.com/css?family=Lato|Montserrat&display=swap"
@@ -27,13 +27,13 @@
 <script src="<%=request.getContextPath()%>/js/14.9.5.min.js"></script>
 </head>
 <%
-	Errors errors = (Errors) request.getAttribute(AttributeNames.ERRORS);
-	if (errors == null)
-		errors = new Errors();
+Errors errors = (Errors) request.getAttribute(AttributeNames.ERRORS);
+if (errors == null)
+	errors = new Errors();
 
-	List<Categoria> categorias = (List<Categoria>) request.getAttribute(AttributeNames.CATEGORIAS);
-	List<TipoContenido> tipos = (List<TipoContenido>) request.getAttribute(AttributeNames.TIPOS);
-	List<Pais> paises = (List<Pais>) request.getAttribute(AttributeNames.PAISES);
+List<Categoria> categorias = (List<Categoria>) request.getAttribute(AttributeNames.CATEGORIAS);
+List<TipoContenido> tipos = (List<TipoContenido>) request.getAttribute(AttributeNames.TIPOS);
+List<Pais> paises = (List<Pais>) request.getAttribute(AttributeNames.PAISES);
 %>
 <body>
 	<div id="body">
@@ -47,16 +47,17 @@
 						</a></li>
 						<li><a href="<%=request.getContextPath()%>"><fmt:message
 									key="inicio" bundle="${traducciones}" /></a></li>
-						<li><a href="#"><fmt:message key="lista"
-									bundle="${traducciones}" /></a></li>
+						<li><a href="<%=request.getContextPath()%>/biblioteca"><fmt:message
+									key="lista" bundle="${traducciones}" /></a></li>
 						<li><a
-							href="<%=request.getContextPath() + ViewPaths.FAVORITOS%>"><fmt:message
+							href="<%=request.getContextPath() + ControllerPaths.FAVORITOS%>"><fmt:message
 									key="favoritos" bundle="${traducciones}" /></a></li>
 						<li><a
 							href="<%=request.getContextPath() + ViewPaths.CARRITO%>"><fmt:message
 									key="carrito" bundle="${traducciones}" /></a></li>
 						<li>
-							<form action="<%=ControllerPaths.CONTENIDO%>" method="post">
+							<form action="${pageContext.request.contextPath}/contenido"
+								method="get">
 								<input type="hidden" name="<%=ParameterNames.ACTION%>"
 									value="<%=Actions.BUSCAR%>" /> <input id="buscador"
 									type="text" name="<%=ParameterNames.TITULO%>"
@@ -64,8 +65,6 @@
 									placeholder="<fmt:message key = "busqueda" bundle="${traducciones}"/>" />
 								<input class="boton" type="submit"
 									value="<fmt:message key = "buscar" bundle="${traducciones}"/>">
-								<input type="hidden" name="<%=ParameterNames.ACTION%>"
-									value="<%=Actions.BUSCAR%>" />
 								<div id="menudes" class="menudes-contido">
 									<%-- <div class="filtro">
 								<label><fmt:message key="categoria"
@@ -80,7 +79,8 @@
 										}
 									%>
 								 </select>
-								 </div>--%><div class="filtro">
+								 </div>--%>
+									<div class="filtro">
 										<label><fmt:message key="restriccionedad"
 												bundle="${traducciones}" /></label> <select
 											name="<%=ParameterNames.RESTRICCION_EDAD%>">
@@ -92,20 +92,22 @@
 											<option value="16+">16+</option>
 											<option value="18+">18+</option>
 										</select>
-									</div><div class="filtro">
+									</div>
+									<div class="filtro">
 										<label><fmt:message key="tipocontenido"
 												bundle="${traducciones}" /></label> <select
 											name="<%=ParameterNames.TIPO_CONTENIDO%>">
 											<option value=""></option>
 											<%
-												for (TipoContenido tc : tipos) {
+											for (TipoContenido tc : tipos) {
 											%>
 											<option value="<%=tc.getIdTipoContenido()%>"><%=tc.getNombreContenido()%></option>
 											<%
-												}
+											}
 											%>
 										</select>
-									</div><div class="filtro">
+									</div>
+									<div class="filtro">
 										<%-- <label><fmt:message key="pais" bundle="${traducciones}" /></label>
 								<select name="<%=ParameterNames.PAIS%>">
 									<option value="null"></option>
@@ -117,7 +119,8 @@
 										}
 									%>
 								</select> --%>
-									</div><div class="filtro">
+									</div>
+									<div class="filtro">
 										<%-- <label><fmt:message key = "descuento" bundle="${traducciones}"/></label>
 						<select name="<%=ParameterNames.DESCUENTO%>" >
 							<option value=""></option> 
@@ -128,7 +131,8 @@
 							<option value="30">30%</option> 
 							<option value="50">50%</option> 
 						</select> --%>
-									</div><div class="filtro">
+									</div>
+									<div class="filtro">
 										<input id="buscador2" type="text"
 											name="<%=ParameterNames.ARTISTA%>"
 											value="<%=ParameterUtils.getParameter(request, ParameterNames.ARTISTA)%>"
@@ -152,12 +156,14 @@
 										<li><a
 											href="<%=request.getContextPath() + ViewPaths.PERFIL%>"><fmt:message
 													key="cuenta" bundle="${traducciones}" /></a></li>
-										<li><a
-											href="<%=request.getContextPath() + ViewPaths.HISTORIAL%>"><fmt:message
+										<li><a href="<%=request.getContextPath()%>/pedidos"><fmt:message
 													key="historial" bundle="${traducciones}" /></a></li>
 										<li><a
 											href="<%=ControllerPaths.USUARIO%>?action=<%=Actions.LOGOUT%>"><fmt:message
 													key="cerrarsesion" bundle="${traducciones}" /></a></li>
+										<li><a
+											href="<%=ControllerPaths.USUARIO%>?action=<%=Actions.ELIMINAR_CUENTA%>">Eliminar
+												Cuenta</a></li>
 									</ul></li>
 							</c:when>
 							<c:otherwise>

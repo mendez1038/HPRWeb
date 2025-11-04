@@ -6,6 +6,7 @@
 		<fmt:message key="iniciosesion" bundle="${traducciones}" />
 	</h1>
 	<form action="<%=ControllerPaths.USUARIO%>" method="post">
+	
 		<input type="hidden" name="<%=ParameterNames.ACTION%>"
 			value="<%=Actions.LOGIN%>">
 		<div class="text-box">

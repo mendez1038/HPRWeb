@@ -13,6 +13,7 @@ public interface ViewPaths {
 	public static final String HISTORIAL = "/html/historial.jsp";
 	public static final String REFERER="referer";
 	public static final String FAVORITOS = "/html/favoritos.jsp";
+	public static final String ELIMINAR_CUENTA = "/html/eliminar.jsp";
 	
 	
 	
