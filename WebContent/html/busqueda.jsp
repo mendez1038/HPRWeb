@@ -11,7 +11,7 @@
             <div class="tpl-title-hp">
                 <div class="sta-title-hp_max">
                     <div class="sta-title-hp_titulo">
-                        Resultados de la búsqueda: ${total_busqueda}</p>
+                       <fmt:message key="resultados" bundle="${traducciones}" /> : ${total_busqueda}</p>
                     </div>
                 </div>
             </div>

@@ -8,7 +8,7 @@
   <div class="tpl-biblioteca-hp">
     <div class="tpl-biblioteca-hp_max">
       <div class="tpl-biblioteca-hp_titulo">
-        <fmt:message key="biblioteca.titulo" bundle="${traducciones}" />
+        <fmt:message key="lista" bundle="${traducciones}" />
       </div>
 
       <c:choose>

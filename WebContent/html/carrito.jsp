@@ -1,5 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@include file="/html/common/header.jsp"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <main>
 	<div class="tpl-carrito-hp">
 		<div class="tpl-carrito-hp_max">
@@ -15,15 +17,15 @@
 						<div class="tpl-carrito-hp_lineacarrito">
 							<img src="${lineas.getContenido().getPortada()}" width="50px">
 							<span> ${lineas.getContenido().getTitulo()} <fmt:message
-									key="precio" bundle="${traducciones}" />:
-									<c:if test="${lineas.getContenido().getPrecioDescontado() > 0}">
+									key="precio" bundle="${traducciones}" />: <c:if
+									test="${lineas.getContenido().getPrecioDescontado() > 0}">
 									
 								${lineas.getContenido().getPrecio() - lineas.getContenido().getPrecioDescontado()} €
 								
-								</c:if><c:if test="${lineas.getContenido().getPrecioDescontado() <= 0}">
+								</c:if>
+								<c:if test="${lineas.getContenido().getPrecioDescontado() <= 0}">
 								${lineas.getContenido().getPrecio()} € 
-								</c:if> <a
-								class="enlace"
+								</c:if> <a class="enlace"
 								href="<%=ControllerPaths.CARRITO %>?<%=ParameterNames.ACTION%>=<%=Actions.ELIMINAR%>&amp;<%=ParameterNames.ID%>=${lineas.getContenido().getIdContenido()}">X</a>
 							</span>
 						</div>
@@ -31,6 +33,13 @@
 					<div class="tpl-carrito-hp_carritofinal">
 						<fmt:message key="total" bundle="${traducciones}" />
 						: ${carrito.getTotal()} €
+						<c:if test="${carrito!=null}">
+							<form method="post"
+								action="${pageContext.request.contextPath}/checkout">
+								<button type="submit" class="boton boton-primary">
+									Comprar</button>
+							</form>
+						</c:if>
 					</div>
 				</c:when>
 				<c:otherwise>

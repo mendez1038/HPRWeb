@@ -83,7 +83,7 @@
 					<c:choose>
 						
 						<c:when test="${not empty sessionScope['user'] and comprado}">
-							<a class="btn btn-primary" href=""> Ver contenido </a>
+							<a class="btn btn-primary" href=""> <fmt:message key="vercontenido" bundle="${traducciones}" /> </a>
 						</c:when>
 						
 						<c:otherwise>

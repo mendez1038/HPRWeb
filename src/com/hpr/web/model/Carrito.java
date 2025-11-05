@@ -79,7 +79,7 @@ public class Carrito {
 				checkDuplicate = true;
 			}
 		} catch (NumberFormatException e) {
-			logger.error("Error al a�adir al carrito: "+ e.getMessage());	
+			logger.error("Error al a�adir al carrito: "+ e.getMessage());	
 		}
 		return checkDuplicate;
 	}
@@ -119,4 +119,15 @@ public class Carrito {
 
 		return repetido;
 	}
+	
+	/** 🧹 Vacía completamente el carrito */
+    public void vaciar() {
+        lineas.clear();
+        total = 0.0;
+    }
+
+    /** ✅ Devuelve true si el carrito está vacío */
+    public boolean isVacio() {
+        return lineas == null || lineas.isEmpty();
+    }
 }

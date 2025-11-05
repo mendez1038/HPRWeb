@@ -378,6 +378,22 @@ a#logo {
 .tpl-carrito-hp_lineacarrito span{margin-left: 25px;padding-right: 20px;position: relative;}
 .tpl-carrito-hp a {color: red;position: absolute;right: 0;top: calc(50% - 10px);}
 .tpl-carrito-hp .tpl-carrito-hp_carritofinal{text-align: right;margin-top: 10px;}
+.tpl-carrito-hp .tpl-carrito-hp_carritofinal form{text-align: center;}
+.tpl-carrito-hp .tpl-carrito-hp_carritofinal .boton.boton-primary{
+    padding: 10px;
+    color: #ff8000;
+    border-radius: 5px;
+    border-color: #ff8000;
+    transition: .3s;
+    margin-right: 20px;
+    background: #fff;
+    margin-top:20px;
+}
+.tpl-carrito-hp .tpl-carrito-hp_carritofinal .boton.boton-primary:hover{
+    color: #fff;
+    border-color: #fff;
+    background: #ff8000;
+}
 /*FIN carrito*/
 
 
